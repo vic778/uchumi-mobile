@@ -45,7 +45,7 @@ export function AppLockScreen({ visible, onUnlock }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center', padding: Spacing.six },
-  logo: { width: 180, height: 60, resizeMode: 'contain', marginBottom: Spacing.three, tintColor: Colors.white },
+  logo: { width: 280, height: 100, resizeMode: 'contain', marginBottom: Spacing.three, tintColor: Colors.white },
   retryBtn: { marginTop: Spacing.six, paddingHorizontal: Spacing.four, paddingVertical: Spacing.two + 2, borderRadius: 12, borderWidth: 1, borderColor: 'rgba(255,255,255,0.35)', backgroundColor: 'rgba(255,255,255,0.12)' },
   retryText:{ fontFamily: Fonts.semiBold, fontSize: 15, color: Colors.white },
 });
