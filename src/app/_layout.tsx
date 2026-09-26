@@ -26,7 +26,6 @@ export default function RootLayout() {
           <Stack.Screen name="index" />
           <Stack.Screen name="(auth)" />
           <Stack.Screen name="(member)" />
-          <Stack.Screen name="(collector)" />
         </Stack>
       </SafeAreaProvider>
     </GestureHandlerRootView>
