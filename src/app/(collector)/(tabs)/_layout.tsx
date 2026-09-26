@@ -1,7 +1,7 @@
 import { Tabs, router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path, Circle, Rect } from 'react-native-svg';
+import Svg, { Path, Circle } from 'react-native-svg';
 import { Colors, Fonts } from '@/constants';
 
 function HomeIcon({ color }: { color: string }) {
@@ -12,29 +12,32 @@ function HomeIcon({ color }: { color: string }) {
     </Svg>
   );
 }
-function MembersIcon({ color }: { color: string }) {
+function SavingsIcon({ color }: { color: string }) {
   return (
     <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-      <Path d="M17 21V19C17 16.79 15.21 15 13 15H5C2.79 15 1 16.79 1 19V21" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
-      <Circle cx="9" cy="7" r="4" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
-      <Path d="M23 21V19C23 17.13 21.65 15.57 19.87 15.13" stroke={color} strokeWidth={1.8} strokeLinecap="round" />
-      <Path d="M16 3.13C17.79 3.57 19.14 5.14 19.14 7.01C19.14 8.88 17.79 10.45 16 10.88" stroke={color} strokeWidth={1.8} strokeLinecap="round" />
-    </Svg>
-  );
-}
-function WithdrawIcon({ color }: { color: string }) {
-  return (
-    <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-      <Rect x="2" y="5" width="20" height="14" rx="2" stroke={color} strokeWidth={1.8} />
-      <Path d="M2 10H22" stroke={color} strokeWidth={1.8} />
-      <Path d="M6 15H10" stroke={color} strokeWidth={1.8} strokeLinecap="round" />
+      <Path d="M12 2C10.34 2 9 3.34 9 5C9 6.66 10.34 8 12 8C13.66 8 15 6.66 15 5C15 3.34 13.66 2 12 2Z"
+        stroke={color} strokeWidth={1.8} strokeLinecap="round" />
+      <Path d="M4 15C4 12.24 7.58 10 12 10C16.42 10 20 12.24 20 15V20C20 21.1 19.1 22 18 22H6C4.9 22 4 21.1 4 20V15Z"
+        stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
     </Svg>
   );
 }
 function LoanIcon({ color }: { color: string }) {
   return (
     <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-      <Path d="M12 2C8.69 2 6 4.69 6 8C6 10.32 7.31 12.33 9.23 13.38L9 22H15L14.77 13.38C16.69 12.33 18 10.32 18 8C18 4.69 15.31 2 12 2Z"
+      <Path d="M21 4H3C1.9 4 3 5 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 5 22.1 4 21 4Z"
+        stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M1 10H23" stroke={color} strokeWidth={1.8} />
+      <Path d="M7 15H10M14 15H17" stroke={color} strokeWidth={1.8} strokeLinecap="round" />
+    </Svg>
+  );
+}
+function BellIcon({ color }: { color: string }) {
+  return (
+    <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
+      <Path d="M18 8A6 6 0 0 0 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z"
+        stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M13.73 21C13.55 21.3 13.28 21.55 12.96 21.72C12.65 21.89 12.33 21.97 12 21.97C11.67 21.97 11.35 21.89 11.04 21.72C10.72 21.55 10.45 21.3 10.27 21"
         stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
     </Svg>
   );
@@ -50,11 +53,11 @@ function MoreIcon({ color }: { color: string }) {
 }
 
 const TABS = [
-  { name: 'dashboard',   label: 'Accueil',  Icon: HomeIcon,      href: '/(collector)/(tabs)/dashboard' },
-  { name: 'members',     label: 'Membres',  Icon: MembersIcon,   href: '/(collector)/(tabs)/members' },
-  { name: 'withdrawals', label: 'Retraits', Icon: WithdrawIcon,  href: '/(collector)/(tabs)/withdrawals' },
-  { name: 'loans',       label: 'Prêts',    Icon: LoanIcon,      href: '/(collector)/(tabs)/loans' },
-  { name: 'profile',     label: 'Plus',     Icon: MoreIcon,      href: '/(collector)/(tabs)/profile' },
+  { name: 'dashboard',     label: 'Accueil', Icon: HomeIcon,    href: '/(collector)/(tabs)/dashboard' },
+  { name: 'savings',       label: 'Comptes', Icon: SavingsIcon, href: '/(collector)/(tabs)/savings' },
+  { name: 'loans',         label: 'Prêts',   Icon: LoanIcon,    href: '/(collector)/(tabs)/loans' },
+  { name: 'notifications', label: 'Alertes', Icon: BellIcon,    href: '/(collector)/(tabs)/notifications' },
+  { name: 'profile',       label: 'Plus',    Icon: MoreIcon,    href: '/(collector)/(tabs)/profile' },
 ];
 
 function TabBar({ state }: any) {
@@ -94,9 +97,9 @@ export default function CollectorTabsLayout() {
       screenOptions={{ headerShown: false }}
       tabBar={(props) => <TabBar {...props} />}>
       <Tabs.Screen name="dashboard" />
-      <Tabs.Screen name="members" />
-      <Tabs.Screen name="withdrawals" />
+      <Tabs.Screen name="savings" />
       <Tabs.Screen name="loans" />
+      <Tabs.Screen name="notifications" />
       <Tabs.Screen name="profile" />
     </Tabs>
   );
