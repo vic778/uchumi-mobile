@@ -2,19 +2,15 @@ import { Tabs, router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path, Circle, Rect } from 'react-native-svg';
-import { Fonts } from '@/constants';
-
-const ADMIN_DARK  = '#0f172a';
-const ADMIN_AMBER = '#f59e0b';
-const ADMIN_MUTED = 'rgba(255,255,255,0.45)';
+import { Colors, Fonts } from '@/constants';
 
 function DashIcon({ color }: { color: string }) {
   return (
     <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-      <Rect x={3}  y={3}  width={8}  height={8}  rx={2} stroke={color} strokeWidth={1.8} />
-      <Rect x={13} y={3}  width={8}  height={8}  rx={2} stroke={color} strokeWidth={1.8} />
-      <Rect x={3}  y={13} width={8}  height={8}  rx={2} stroke={color} strokeWidth={1.8} />
-      <Rect x={13} y={13} width={8}  height={8}  rx={2} stroke={color} strokeWidth={1.8} />
+      <Rect x={3}  y={3}  width={8} height={8}  rx={2} stroke={color} strokeWidth={1.8} />
+      <Rect x={13} y={3}  width={8} height={8}  rx={2} stroke={color} strokeWidth={1.8} />
+      <Rect x={3}  y={13} width={8} height={8}  rx={2} stroke={color} strokeWidth={1.8} />
+      <Rect x={13} y={13} width={8} height={8}  rx={2} stroke={color} strokeWidth={1.8} />
     </Svg>
   );
 }
@@ -33,7 +29,7 @@ function MembersIcon({ color }: { color: string }) {
 function KycIcon({ color }: { color: string }) {
   return (
     <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-      <Path d="M9 11l3 3L22 4"        stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M9 11l3 3L22 4" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
       <Path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke={color} strokeWidth={1.8} strokeLinecap="round" />
     </Svg>
   );
@@ -47,11 +43,12 @@ function LoansIcon({ color }: { color: string }) {
   );
 }
 
-function PlusIcon({ color }: { color: string }) {
+function MoreIcon({ color }: { color: string }) {
   return (
     <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-      <Circle cx={12} cy={12} r={9}   stroke={color} strokeWidth={1.8} />
-      <Path d="M12 8v8M8 12h8"        stroke={color} strokeWidth={1.8} strokeLinecap="round" />
+      <Circle cx={5}  cy={12} r={1.5} fill={color} />
+      <Circle cx={12} cy={12} r={1.5} fill={color} />
+      <Circle cx={19} cy={12} r={1.5} fill={color} />
     </Svg>
   );
 }
@@ -61,7 +58,7 @@ const TABS = [
   { name: 'members',   label: 'Membres', Icon: MembersIcon, href: '/(admin)/(tabs)/members' },
   { name: 'kyc',       label: 'KYC',     Icon: KycIcon,     href: '/(admin)/(tabs)/kyc' },
   { name: 'loans',     label: 'Prêts',   Icon: LoansIcon,   href: '/(admin)/(tabs)/loans' },
-  { name: 'profile',   label: 'Plus',    Icon: PlusIcon,    href: '/(admin)/(tabs)/profile' },
+  { name: 'profile',   label: 'Plus',    Icon: MoreIcon,    href: '/(admin)/(tabs)/profile' },
 ];
 
 function AdminTabBar({ state }: any) {
@@ -73,7 +70,7 @@ function AdminTabBar({ state }: any) {
       <View style={styles.bar}>
         {TABS.map((tab) => {
           const isActive = currentRoute === tab.name || currentRoute.startsWith(tab.name + '/');
-          const color = isActive ? ADMIN_AMBER : ADMIN_MUTED;
+          const color = isActive ? Colors.primary : Colors.steelGray;
           return (
             <Pressable
               key={tab.name}
@@ -89,7 +86,7 @@ function AdminTabBar({ state }: any) {
         })}
       </View>
       {insets.bottom > 0 && (
-        <View style={{ height: insets.bottom, backgroundColor: ADMIN_DARK }} />
+        <View style={{ height: insets.bottom, backgroundColor: Colors.white }} />
       )}
     </View>
   );
@@ -111,7 +108,9 @@ export default function AdminTabsLayout() {
 
 const styles = StyleSheet.create({
   bar: {
-    backgroundColor: ADMIN_DARK,
+    backgroundColor: Colors.white,
+    borderTopWidth: 1,
+    borderTopColor: '#e5e7eb',
     flexDirection: 'row',
     paddingTop: 8,
     paddingBottom: 6,
