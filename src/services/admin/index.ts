@@ -42,7 +42,10 @@ export type AdminTransaction = {
   amount: number;
   status: string;
   member?: string;
+  member_phone?: string;
   collector?: string;
+  approved_by?: string;
+  note?: string;
   created_at: string;
 };
 
@@ -199,5 +202,24 @@ export const rejectKyc = async (id: number, notes?: string): Promise<void> => {
 
 export const getSavingsPlans = async (): Promise<SavingsPlan[]> => {
   const r = await api.get('/admin/savings_plans');
+  return r.data.data;
+};
+
+export type AdminNotification = {
+  id: number;
+  kind: string;
+  title: string;
+  body?: string;
+  read: boolean;
+  created_at: string;
+};
+
+export const getAdminTransactions = async (params?: { kind?: string; period?: string; type?: string }): Promise<AdminTransaction[]> => {
+  const r = await api.get('/admin/transactions', { params });
+  return r.data.data;
+};
+
+export const getAdminNotifications = async (): Promise<AdminNotification[]> => {
+  const r = await api.get('/admin/notifications');
   return r.data.data;
 };
