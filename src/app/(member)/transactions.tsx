@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { BackButton } from '@/components/ui/back-button';
 import { TxIcon } from '@/components/ui/tx-icon';
+import { TxDetailModal, type TxDetailData } from '@/components/ui/tx-detail-modal';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getTransactions } from '@/services/member/account';
 import type { Transaction } from '@/types';
@@ -38,6 +39,7 @@ export default function TransactionsScreen() {
   const [loading, setLoading]           = useState(true);
   const [kind, setKind]                 = useState('');
   const [period, setPeriod]             = useState('current_month');
+  const [selected, setSelected]         = useState<TxDetailData | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -93,12 +95,15 @@ export default function TransactionsScreen() {
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={<Text style={styles.empty}>Aucune transaction pour cette période</Text>}
           renderItem={({ item: tx }) => {
-            const isCredit = tx.kind === 'deposit' || tx.kind === 'loan_credit';
+            const isCredit = tx.kind === 'deposit' || tx.kind === 'loan_credit' || tx.kind === 'transfer_from_blocked';
             const date = new Date(tx.created_at).toLocaleDateString('fr-CD', {
               day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
             });
             return (
-              <View style={styles.txRow}>
+              <TouchableOpacity
+                style={styles.txRow}
+                onPress={() => setSelected({ ...tx })}
+                activeOpacity={0.7}>
                 <TxIcon kind={tx.kind} />
                 <View style={styles.txMid}>
                   <Text style={styles.txTitle}>{KIND_LABEL[tx.kind] ?? tx.kind}</Text>
@@ -112,11 +117,13 @@ export default function TransactionsScreen() {
                     {isCredit ? 'CRÉDIT' : 'DÉBIT'}
                   </Text>
                 </View>
-              </View>
+              </TouchableOpacity>
             );
           }}
         />
       )}
+
+      <TxDetailModal tx={selected} onClose={() => setSelected(null)} />
     </View>
   );
 }
