@@ -53,11 +53,10 @@ function MoreIcon({ color }: { color: string }) {
 }
 
 const TABS = [
-  { name: 'dashboard',     label: 'Accueil', Icon: HomeIcon,    href: '/(member)/(tabs)/dashboard' },
-  { name: 'savings',       label: 'Comptes', Icon: SavingsIcon, href: '/(member)/(tabs)/savings' },
-  { name: 'loans',         label: 'Prêts',   Icon: LoanIcon,    href: '/(member)/(tabs)/loans' },
-  { name: 'notifications', label: 'Alertes', Icon: BellIcon,    href: '/(member)/(tabs)/notifications' },
-  { name: 'profile',       label: 'Plus',    Icon: MoreIcon,    href: '/(member)/(tabs)/profile' },
+  { name: 'dashboard', label: 'Accueil', Icon: HomeIcon,    href: '/(member)/(tabs)/dashboard' },
+  { name: 'savings',   label: 'Comptes', Icon: SavingsIcon, href: '/(member)/(tabs)/savings' },
+  { name: 'loans',     label: 'Prêts',   Icon: LoanIcon,    href: '/(member)/(tabs)/loans' },
+  { name: 'profile',   label: 'Plus',    Icon: MoreIcon,    href: '/(member)/(tabs)/profile' },
 ];
 
 function TabBar({ state }: any) {
@@ -99,7 +98,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="dashboard" />
       <Tabs.Screen name="savings" />
       <Tabs.Screen name="loans" />
-      <Tabs.Screen name="notifications" />
+      <Tabs.Screen name="notifications" options={{ href: null }} />
       <Tabs.Screen name="profile" />
     </Tabs>
   );
