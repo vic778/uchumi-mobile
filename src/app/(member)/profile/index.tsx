@@ -2,11 +2,9 @@ import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
-import { MemberTabBar } from '@/components/navigation/member-tab-bar';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { logout } from '@/services/auth';
 
-const TAB_BAR_H = 70;
 
 type MenuItem = { label: string; icon: string; onPress: () => void; danger?: boolean };
 
@@ -61,7 +59,7 @@ export default function MemberProfileScreen() {
       </View>
 
       <ScrollView
-        contentContainerStyle={[styles.scroll, { paddingBottom: TAB_BAR_H + insets.bottom + Spacing.four }]}
+        contentContainerStyle={[styles.scroll, { paddingBottom: Spacing.four }]}
         showsVerticalScrollIndicator={false}>
 
         {sections.map((section, si) => (
@@ -85,7 +83,6 @@ export default function MemberProfileScreen() {
         ))}
       </ScrollView>
 
-      <MemberTabBar active="profile" />
     </View>
   );
 }
