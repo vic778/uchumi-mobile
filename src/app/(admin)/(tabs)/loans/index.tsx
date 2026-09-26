@@ -5,9 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getLoans, type AdminLoanSummary } from '@/services/admin';
 
-const ADMIN_DARK  = '#0f172a';
-const ADMIN_AMBER = '#f59e0b';
-const CURRENCY    = 'CDF';
+const CURRENCY = 'CDF';
 const fmtK = (n: number) => n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}M` : n >= 1_000 ? `${(n / 1_000).toFixed(0)}k` : String(n);
 
 const STATUSES = [
@@ -22,7 +20,7 @@ const STATUSES = [
 ];
 
 const STATUS_COLORS: Record<string, string> = {
-  pending:       ADMIN_AMBER,
+  pending:       Colors.warning,
   offer_sent:    '#a78bfa',
   member_agreed: '#60a5fa',
   approved:      Colors.primary,
@@ -118,10 +116,10 @@ const styles = StyleSheet.create({
   headerCount: { fontFamily: Fonts.bold, fontSize: 14, color: 'rgba(255,255,255,0.5)' },
 
   filterScroll: { backgroundColor: Colors.white, borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
-  filterRow: { flexDirection: 'row', gap: Spacing.two, paddingHorizontal: Spacing.three, paddingVertical: Spacing.two + 2 },
-  filterChip: { paddingHorizontal: Spacing.two + 2, paddingVertical: 6, borderRadius: 20, borderWidth: 1.5, borderColor: Colors.muted },
-  filterChipActive: { backgroundColor: Colors.primary, borderColor: ADMIN_DARK },
-  filterLabel: { fontFamily: Fonts.semiBold, fontSize: 13, color: Colors.steelGray },
+  filterRow: { flexDirection: 'row', gap: 6, paddingHorizontal: Spacing.three, paddingVertical: 8 },
+  filterChip: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20, borderWidth: 1, borderColor: Colors.muted },
+  filterChipActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+  filterLabel: { fontFamily: Fonts.medium, fontSize: 11, color: Colors.steelGray },
   filterLabelActive: { color: Colors.white },
 
   list: { paddingBottom: Spacing.four, backgroundColor: Colors.white },
