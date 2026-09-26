@@ -6,8 +6,24 @@ import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { fontAssets } from '@/constants/fonts';
+import { AppLockProvider, useAppLock } from '@/context/app-lock-context';
+import { AppLockScreen } from '@/components/ui/app-lock-screen';
 
 SplashScreen.preventAutoHideAsync();
+
+function AppContent() {
+  const { locked, unlock } = useAppLock();
+  return (
+    <>
+      <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(member)" />
+      </Stack>
+      <AppLockScreen visible={locked} onUnlock={unlock} />
+    </>
+  );
+}
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts(fontAssets);
@@ -22,11 +38,9 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <StatusBar style="dark" />
-        <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(member)" />
-        </Stack>
+        <AppLockProvider>
+          <AppContent />
+        </AppLockProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
