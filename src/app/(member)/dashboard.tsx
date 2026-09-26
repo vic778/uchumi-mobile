@@ -100,7 +100,7 @@ export default function MemberDashboard() {
             <View style={styles.actionsGrid}>
               <QuickAction icon="💸" label="Retrait" onPress={() => router.push(Routes.memberWithdrawals as any)} />
               <QuickAction icon="💳" label="Crédit" onPress={() => router.push(Routes.memberLoans as any)} />
-              <QuickAction icon="📄" label="Documents" onPress={() => router.push(Routes.memberDocuments as any)} />
+              <QuickAction icon="💰" label="Dépôt" onPress={() => {}} disabled />
               <QuickAction icon="📊" label="Historique" onPress={() => router.push(Routes.memberTransactions as any)} />
             </View>
 
@@ -129,11 +129,16 @@ export default function MemberDashboard() {
   );
 }
 
-function QuickAction({ icon, label, onPress }: { icon: string; label: string; onPress: () => void }) {
+function QuickAction({ icon, label, onPress, disabled }: { icon: string; label: string; onPress: () => void; disabled?: boolean }) {
   return (
-    <TouchableOpacity style={styles.actionItem} onPress={onPress} activeOpacity={0.75}>
-      <View style={styles.actionIconWrap}><Text style={styles.actionEmoji}>{icon}</Text></View>
-      <Text style={styles.actionLabel}>{label}</Text>
+    <TouchableOpacity style={[styles.actionItem, disabled && styles.actionItemDisabled]} onPress={onPress} activeOpacity={disabled ? 1 : 0.75} disabled={disabled}>
+      <View style={[styles.actionIconWrap, disabled && styles.actionIconWrapDisabled]}>
+        <Text style={styles.actionEmoji}>{icon}</Text>
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text style={[styles.actionLabel, disabled && styles.actionLabelDisabled]}>{label}</Text>
+        {disabled && <Text style={styles.actionSoon}>Bientôt</Text>}
+      </View>
     </TouchableOpacity>
   );
 }
@@ -205,6 +210,10 @@ const styles = StyleSheet.create({
   actionIconWrap: { width: 38, height: 38, borderRadius: 10, backgroundColor: '#e8f4f8', alignItems: 'center', justifyContent: 'center' },
   actionEmoji: { fontSize: 18 },
   actionLabel: { fontFamily: Fonts.bold, fontSize: 15, color: Colors.charcoal, flexShrink: 1 },
+  actionItemDisabled: { opacity: 0.55, borderStyle: 'dashed' },
+  actionIconWrapDisabled: { backgroundColor: Colors.coolGray },
+  actionLabelDisabled: { color: Colors.steelGray },
+  actionSoon: { fontFamily: Fonts.medium, fontSize: 11, color: Colors.primary, marginTop: 1 },
 
   // Activity
   activityCard: { backgroundColor: Colors.white, borderRadius: 14, overflow: 'hidden', borderWidth: 1, borderColor: Colors.coolGray, elevation: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 3 },
