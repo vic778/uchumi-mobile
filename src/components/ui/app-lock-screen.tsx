@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Colors, Fonts, Spacing } from '@/constants';
-import { UchumiLogo } from './uchumi-logo';
+import { Image } from 'react-native';
+
+const fullLogo = require('../../../assets/images/full_logo_transparent.png');
 
 type Props = {
   visible: boolean;
@@ -31,7 +33,7 @@ export function AppLockScreen({ visible, onUnlock }: Props) {
   return (
     <Modal visible={visible} animationType="fade" statusBarTranslucent hardwareAccelerated>
       <View style={styles.root}>
-        <UchumiLogo style={styles.logo} />
+        <Image source={fullLogo} style={styles.logo} />
 
         {dismissed && (
           <TouchableOpacity style={styles.retryBtn} onPress={trigger} activeOpacity={0.8}>
@@ -45,7 +47,7 @@ export function AppLockScreen({ visible, onUnlock }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center', padding: Spacing.six },
-  logo: { width: 280, height: 100, resizeMode: 'contain', marginBottom: Spacing.three, tintColor: Colors.white },
+  logo: { width: 280, height: 140, resizeMode: 'contain', marginBottom: Spacing.three },
   retryBtn: { marginTop: Spacing.six, paddingHorizontal: Spacing.four, paddingVertical: Spacing.two + 2, borderRadius: 12, borderWidth: 1, borderColor: 'rgba(255,255,255,0.35)', backgroundColor: 'rgba(255,255,255,0.12)' },
   retryText:{ fontFamily: Fonts.semiBold, fontSize: 15, color: Colors.white },
 });
