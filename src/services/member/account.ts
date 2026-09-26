@@ -6,6 +6,11 @@ export async function getAccount(): Promise<Account> {
   return res.data.data;
 }
 
+export async function getAccounts(): Promise<Account[]> {
+  const res = await api.get<{ data: Account[] }>('/member/accounts');
+  return res.data.data;
+}
+
 export async function getTransactions(): Promise<Transaction[]> {
   const res = await api.get<{ data: Transaction[] }>('/member/transactions');
   return res.data.data;

@@ -8,6 +8,7 @@ export type SavingsPlan = {
 
 export type Account = {
   id: number;
+  name?: string;
   balance: number;
   savings_plan: SavingsPlan | null;
   member_since: string;
