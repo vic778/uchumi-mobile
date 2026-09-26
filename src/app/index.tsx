@@ -21,7 +21,7 @@ export default function AuthGate() {
 
   const { role } = state.user;
   if (role === 'member')    return <Redirect href="/(member)/dashboard" />;
-  if (role === 'collector') return <Redirect href="/(collector)/dashboard" />;
+  if (role === 'collector') return <Redirect href={"/(collector)/dashboard" as any} />;
   // admin — placeholder until Phase 5
   return <Redirect href="/(auth)/login" />;
 }
