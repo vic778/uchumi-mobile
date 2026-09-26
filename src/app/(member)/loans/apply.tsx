@@ -3,6 +3,7 @@ import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View 
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { authFieldStyles as fieldStyles } from '@/components/auth/field-styles';
+import { BackButton } from '@/components/ui/back-button';
 import { AuthPrimaryButton } from '@/components/auth/shell';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { applyLoan } from '@/services/member/loans';
@@ -33,12 +34,11 @@ export default function LoanApplyScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.surface }}>
-      <View style={[styles.header, { paddingTop: insets.top + Spacing.three }]}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Text style={styles.backIcon}>←</Text>
-        </TouchableOpacity>
+    <View style={{ flex: 1, backgroundColor: Colors.background }}>
+      <View style={[styles.header, { paddingTop: insets.top + 14 }]}>
+        <BackButton onPress={() => router.back()} />
         <Text style={styles.title}>Demander un prêt</Text>
+        <View style={{ width: 38 }} />
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
@@ -84,10 +84,8 @@ export default function LoanApplyScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: { paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
-  backBtn: { padding: Spacing.one },
-  backIcon: { fontSize: 22, color: Colors.charcoal },
-  title: { fontFamily: Fonts.bold, fontSize: 22, color: Colors.charcoal },
+  header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.two },
+  title: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white, flex: 1, textAlign: 'center' },
   scroll: { paddingHorizontal: Spacing.four, paddingBottom: Spacing.six, gap: Spacing.four },
   durationWrap: {},
   durationRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
