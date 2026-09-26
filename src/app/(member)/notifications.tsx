@@ -20,10 +20,6 @@ export default function NotificationsScreen() {
         <Text style={styles.headerTitle}>Notifications</Text>
       </View>
 
-      <View style={styles.subHeader}>
-        <Text style={styles.subLabel}>NOUVELLES NOTIFICATIONS</Text>
-      </View>
-
       {loading ? <ActivityIndicator color={Colors.primary} style={{ marginTop: 60 }} /> : (
         <FlatList
           data={items}
@@ -56,8 +52,6 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.background },
   header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three },
   headerTitle: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white },
-  subHeader: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three, paddingBottom: Spacing.two, borderBottomWidth: 1, borderBottomColor: Colors.coolGray, backgroundColor: Colors.white },
-  subLabel: { fontFamily: Fonts.bold, fontSize: 13, color: Colors.primary, letterSpacing: 0.8 },
   card: { backgroundColor: Colors.white, padding: Spacing.three, flexDirection: 'row', gap: Spacing.three, alignItems: 'flex-start' },
   cardUnread: {},
   cardIcon: { width: 42, height: 42, borderRadius: 10, backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.coolGray, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
