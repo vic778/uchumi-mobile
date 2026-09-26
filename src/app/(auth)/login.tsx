@@ -21,7 +21,7 @@ export default function LoginScreen() {
       await saveToken(res.token);
       const role = res.role;
       if (role === 'member')    router.replace('/(member)/dashboard');
-      else if (role === 'collector') router.replace('/(collector)/dashboard');
+      else if (role === 'collector') router.replace('/(collector)/dashboard' as any);
       else router.replace('/(auth)/login');
     } catch (e: any) {
       Alert.alert('Connexion échouée', e.message);
