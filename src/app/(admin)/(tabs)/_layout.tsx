@@ -86,7 +86,7 @@ function AdminTabBar({ state }: any) {
         })}
       </View>
       {insets.bottom > 0 && (
-        <View style={{ height: insets.bottom, backgroundColor: Colors.white }} />
+        <View style={{ height: insets.bottom, backgroundColor: '#000' }} />
       )}
     </View>
   );
