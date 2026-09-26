@@ -3,7 +3,6 @@ import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import Svg, { Path } from 'react-native-svg';
-import { MemberTabBar } from '@/components/navigation/member-tab-bar';
 import { TxIcon } from '@/components/ui/tx-icon';
 import { Colors, Fonts, Routes, Spacing } from '@/constants';
 import { getAccount, getTransactions } from '@/services/member/account';
@@ -12,7 +11,6 @@ import type { Account, Transaction } from '@/types';
 
 const CURRENCY = 'CDF';
 const fmt = (n: number) => n.toLocaleString('fr-CD') + ' ' + CURRENCY;
-const TAB_BAR_H = 70;
 
 export default function MemberDashboard() {
   const insets = useSafeAreaInsets();
@@ -61,7 +59,7 @@ export default function MemberDashboard() {
 
       <ScrollView
         style={styles.scroll}
-        contentContainerStyle={[styles.scrollContent, { paddingBottom: TAB_BAR_H + insets.bottom + Spacing.four }]}
+        contentContainerStyle={[styles.scrollContent, { paddingBottom: Spacing.four }]}
         showsVerticalScrollIndicator={false}>
 
         {loading ? (
@@ -124,7 +122,6 @@ export default function MemberDashboard() {
         )}
       </ScrollView>
 
-      <MemberTabBar active="dashboard" />
     </View>
   );
 }
