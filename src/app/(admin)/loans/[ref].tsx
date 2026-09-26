@@ -134,6 +134,39 @@ export default function AdminLoanDetailScreen() {
           </View>
         )}
 
+        {/* Payment history */}
+        {(() => {
+          const paid = l.installments.filter((i) => i.paid && i.paid_at);
+          if (!paid.length && l.status !== 'active' && l.status !== 'repaid') return null;
+          return (
+            <View style={styles.card}>
+              <Text style={styles.sectionLabel}>HISTORIQUE DES PAIEMENTS</Text>
+              {paid.length === 0 ? (
+                <Text style={styles.emptyHistory}>Aucun paiement enregistré.</Text>
+              ) : (
+                paid.slice().reverse().map((inst, idx) => (
+                  <View key={inst.id} style={[styles.histRow, idx === paid.length - 1 && styles.histRowLast]}>
+                    <View style={styles.histDot} />
+                    <View style={{ flex: 1 }}>
+                      <Text style={styles.histLabel}>Versement #{paid.length - idx}</Text>
+                      <Text style={styles.histDate}>{fmtD(inst.paid_at!)}</Text>
+                    </View>
+                    <Text style={styles.histAmount}>+{fmt(inst.amount)} {CURRENCY}</Text>
+                  </View>
+                ))
+              )}
+              {paid.length > 0 && (
+                <View style={styles.histSummary}>
+                  <Text style={styles.histSummaryLabel}>Total remboursé</Text>
+                  <Text style={styles.histSummaryValue}>
+                    {fmt(paid.reduce((s, i) => s + i.amount, 0))} {CURRENCY}
+                  </Text>
+                </View>
+              )}
+            </View>
+          );
+        })()}
+
         {/* Actions by status */}
         {l.status === 'pending' && (
           <View style={styles.card}>
@@ -261,4 +294,15 @@ const styles = StyleSheet.create({
   fieldLabel: { fontFamily: Fonts.semiBold, fontSize: 14, color: Colors.charcoal },
   notesInput: { borderWidth: 1.5, borderColor: Colors.muted, borderRadius: 10, padding: Spacing.two, fontFamily: Fonts.regular, fontSize: 15, color: Colors.charcoal, textAlignVertical: 'top' },
   amountInput:{ borderWidth: 1.5, borderColor: Colors.muted, borderRadius: 12, padding: Spacing.two + 2, fontFamily: Fonts.regular, fontSize: 18, color: Colors.charcoal, textAlign: 'center' },
+
+  emptyHistory: { fontFamily: Fonts.regular, fontSize: 14, color: Colors.steelGray, textAlign: 'center', paddingVertical: Spacing.two },
+  histRow:     { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
+  histRowLast: { borderBottomWidth: 0 },
+  histDot:     { width: 10, height: 10, borderRadius: 5, backgroundColor: Colors.growth },
+  histLabel:   { fontFamily: Fonts.semiBold, fontSize: 14, color: Colors.charcoal },
+  histDate:    { fontFamily: Fonts.regular, fontSize: 12, color: Colors.steelGray, marginTop: 1 },
+  histAmount:  { fontFamily: Fonts.bold, fontSize: 14, color: Colors.growth },
+  histSummary: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingTop: Spacing.two, borderTopWidth: 1, borderTopColor: Colors.coolGray, marginTop: Spacing.one },
+  histSummaryLabel: { fontFamily: Fonts.semiBold, fontSize: 13, color: Colors.steelGray },
+  histSummaryValue: { fontFamily: Fonts.bold, fontSize: 15, color: Colors.growth },
 });
