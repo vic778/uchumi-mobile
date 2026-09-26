@@ -22,5 +22,5 @@ export function StatusBadge({ status }: { status: Status }) {
 
 const styles = StyleSheet.create({
   badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 100 },
-  label: { fontFamily: Fonts.semiBold, fontSize: 12, lineHeight: 16 },
+  label: { fontFamily: Fonts.semiBold, fontSize: 14, lineHeight: 16 },
 });
