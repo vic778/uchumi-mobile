@@ -25,7 +25,7 @@ export default function RegisterScreen() {
         full_name: name.trim(), phone_number: `243${phone.trim()}`, password,
       });
       await saveToken(res.data.data.token);
-      router.replace('/(member)/dashboard');
+      router.replace('/(member)/(tabs)/dashboard');
     } catch (e: any) {
       Alert.alert('Inscription échouée', e.message);
     } finally {
