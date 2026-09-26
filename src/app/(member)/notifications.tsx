@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MemberTabBar } from '@/components/navigation/member-tab-bar';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getNotifications } from '@/services/member/account';
 import type { Notification } from '@/types';
@@ -29,7 +28,7 @@ export default function NotificationsScreen() {
         <FlatList
           data={items}
           keyExtractor={(n) => String(n.id)}
-          contentContainerStyle={{ paddingHorizontal: Spacing.four, paddingTop: Spacing.three, paddingBottom: 80 }}
+          contentContainerStyle={{ paddingHorizontal: Spacing.four, paddingTop: Spacing.three, paddingBottom: Spacing.four }}
           ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: Colors.coolGray }} />}
           renderItem={({ item }) => (
             <View style={[styles.card, !item.read && styles.cardUnread]}>
@@ -49,7 +48,6 @@ export default function NotificationsScreen() {
         />
       )}
 
-      <MemberTabBar active="notifications" />
     </View>
   );
 }
