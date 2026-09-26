@@ -37,9 +37,10 @@ export default function AdminProfileScreen() {
     {
       title: 'Gestion',
       items: [
-        { label: 'Retraits',         icon: '💸', onPress: () => router.push('/(admin)/withdrawals' as any) },
+        { label: 'Transactions',      icon: '💳', onPress: () => router.push('/(admin)/transactions' as any) },
+        { label: 'Retraits',          icon: '💸', onPress: () => router.push('/(admin)/withdrawals' as any) },
         { label: 'Plans d\'épargne',  icon: '📊', onPress: () => router.push('/(admin)/savings-plans' as any) },
-        { label: 'Dépôt manuel',     icon: '💰', onPress: () => router.push('/(admin)/deposits/new' as any) },
+        { label: 'Dépôt manuel',      icon: '💰', onPress: () => router.push('/(admin)/deposits/new' as any) },
       ],
     },
     {
