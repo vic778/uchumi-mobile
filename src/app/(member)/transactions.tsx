@@ -46,11 +46,6 @@ export default function TransactionsScreen() {
         </View>
       </View>
 
-      {/* Section label */}
-      <View style={styles.subHeader}>
-        <Text style={styles.subLabel}>VOS TRANSACTIONS</Text>
-      </View>
-
       {/* Search */}
       <View style={styles.searchWrap}>
         <Svg width={16} height={16} viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
@@ -110,8 +105,6 @@ const styles = StyleSheet.create({
   header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three },
   headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   headerTitle: { fontFamily: Fonts.bold, fontSize: 16, color: Colors.white },
-  subHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: Spacing.four, paddingTop: Spacing.three, paddingBottom: Spacing.two, borderBottomWidth: 1, borderBottomColor: Colors.coolGray, backgroundColor: Colors.white },
-  subLabel: { fontFamily: Fonts.bold, fontSize: 13, color: Colors.primary, letterSpacing: 0.8 },
   searchWrap: { flexDirection: 'row', alignItems: 'center', margin: Spacing.three, backgroundColor: 'rgba(108,122,137,0.12)', borderRadius: 12, paddingHorizontal: Spacing.three, paddingVertical: 10 },
   searchInput: { flex: 1, fontFamily: Fonts.regular, fontSize: 16, color: Colors.charcoal, padding: 0 },
   separator: { height: 1, backgroundColor: Colors.coolGray, marginLeft: Spacing.four + 46 + Spacing.three },
