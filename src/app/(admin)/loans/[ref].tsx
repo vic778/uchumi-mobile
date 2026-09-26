@@ -4,13 +4,23 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BackButton } from '@/components/ui/back-button';
 import { Colors, Fonts, Spacing } from '@/constants';
-import { getLoan, approveLoan, fundLoan, rejectLoan, repayLoan, type AdminLoanDetail } from '@/services/admin';
+import { getLoan, approveLoan, fundLoan, rejectLoan, repayLoan, type AdminLoanDetail, type LoanLog } from '@/services/admin';
 
 const ADMIN_DARK  = '#0f172a';
 const ADMIN_AMBER = '#f59e0b';
 const CURRENCY    = 'CDF';
 const fmt  = (n: number) => n.toLocaleString('fr-CD');
 const fmtD = (s: string) => new Date(s).toLocaleDateString('fr-CD', { day: '2-digit', month: 'short', year: 'numeric' });
+
+const LOG_META: Record<string, { color: string; bg: string }> = {
+  submitted:     { color: Colors.steelGray, bg: Colors.coolGray },
+  offer_sent:    { color: '#a78bfa',        bg: '#a78bfa22' },
+  member_agreed: { color: '#60a5fa',        bg: '#60a5fa22' },
+  approved:      { color: Colors.primary,   bg: Colors.primary + '18' },
+  rejected:      { color: Colors.danger,    bg: Colors.danger + '18' },
+  disbursed:     { color: Colors.growth,    bg: Colors.growth + '18' },
+  repaid:        { color: '#0ea5e9',        bg: '#0ea5e918' },
+};
 
 const STATUS_COLORS: Record<string, string> = {
   pending:       ADMIN_AMBER,
@@ -134,38 +144,51 @@ export default function AdminLoanDetailScreen() {
           </View>
         )}
 
-        {/* Payment history */}
-        {(() => {
-          const paid = l.installments.filter((i) => i.paid && i.paid_at);
-          if (!paid.length && l.status !== 'active' && l.status !== 'repaid') return null;
-          return (
-            <View style={styles.card}>
-              <Text style={styles.sectionLabel}>HISTORIQUE DES PAIEMENTS</Text>
-              {paid.length === 0 ? (
-                <Text style={styles.emptyHistory}>Aucun paiement enregistré.</Text>
-              ) : (
-                paid.slice().reverse().map((inst, idx) => (
-                  <View key={inst.id} style={[styles.histRow, idx === paid.length - 1 && styles.histRowLast]}>
-                    <View style={styles.histDot} />
-                    <View style={{ flex: 1 }}>
-                      <Text style={styles.histLabel}>Versement #{paid.length - idx}</Text>
-                      <Text style={styles.histDate}>{fmtD(inst.paid_at!)}</Text>
-                    </View>
-                    <Text style={styles.histAmount}>+{fmt(inst.amount)} {CURRENCY}</Text>
+        {/* Loan history timeline */}
+        {l.logs.length > 0 && (
+          <View style={styles.card}>
+            <Text style={styles.sectionLabel}>HISTORIQUE DU PRÊT</Text>
+            {l.logs.map((log, idx) => {
+              const isLast    = idx === l.logs.length - 1;
+              const meta      = LOG_META[log.action] ?? { color: Colors.steelGray, bg: Colors.coolGray };
+              const fmtFull   = (s: string) => new Date(s).toLocaleDateString('fr-CD', {
+                day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
+              });
+              return (
+                <View key={log.id} style={styles.timelineRow}>
+                  {/* Vertical connector */}
+                  <View style={styles.timelineTrack}>
+                    <View style={[styles.timelineDot, { backgroundColor: meta.color }]} />
+                    {!isLast && <View style={styles.timelineLine} />}
                   </View>
-                ))
-              )}
-              {paid.length > 0 && (
-                <View style={styles.histSummary}>
-                  <Text style={styles.histSummaryLabel}>Total remboursé</Text>
-                  <Text style={styles.histSummaryValue}>
-                    {fmt(paid.reduce((s, i) => s + i.amount, 0))} {CURRENCY}
-                  </Text>
+                  {/* Content */}
+                  <View style={[styles.timelineContent, !isLast && { paddingBottom: Spacing.three }]}>
+                    <View style={styles.timelineTop}>
+                      <Text style={[styles.timelineAction, { color: meta.color }]}>{log.action_label}</Text>
+                      {log.notes && log.action === 'repaid' && (
+                        <View style={[styles.timelineAmtBadge, { backgroundColor: Colors.growth + '18' }]}>
+                          <Text style={[styles.timelineAmt, { color: Colors.growth }]}>−{log.notes}</Text>
+                        </View>
+                      )}
+                      {log.action === 'disbursed' && l.disbursed_amount && (
+                        <View style={[styles.timelineAmtBadge, { backgroundColor: Colors.primary + '18' }]}>
+                          <Text style={[styles.timelineAmt, { color: Colors.primary }]}>+{fmt(l.disbursed_amount)} {CURRENCY}</Text>
+                        </View>
+                      )}
+                    </View>
+                    <Text style={styles.timelineDate}>{fmtFull(log.created_at)}</Text>
+                    {log.user_name && (
+                      <Text style={styles.timelineUser}>par {log.user_name}</Text>
+                    )}
+                    {log.notes && log.action !== 'repaid' && (
+                      <Text style={styles.timelineNote}>{log.notes}</Text>
+                    )}
+                  </View>
                 </View>
-              )}
-            </View>
-          );
-        })()}
+              );
+            })}
+          </View>
+        )}
 
         {/* Actions by status */}
         {l.status === 'pending' && (
@@ -295,14 +318,16 @@ const styles = StyleSheet.create({
   notesInput: { borderWidth: 1.5, borderColor: Colors.muted, borderRadius: 10, padding: Spacing.two, fontFamily: Fonts.regular, fontSize: 15, color: Colors.charcoal, textAlignVertical: 'top' },
   amountInput:{ borderWidth: 1.5, borderColor: Colors.muted, borderRadius: 12, padding: Spacing.two + 2, fontFamily: Fonts.regular, fontSize: 18, color: Colors.charcoal, textAlign: 'center' },
 
-  emptyHistory: { fontFamily: Fonts.regular, fontSize: 14, color: Colors.steelGray, textAlign: 'center', paddingVertical: Spacing.two },
-  histRow:     { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
-  histRowLast: { borderBottomWidth: 0 },
-  histDot:     { width: 10, height: 10, borderRadius: 5, backgroundColor: Colors.growth },
-  histLabel:   { fontFamily: Fonts.semiBold, fontSize: 14, color: Colors.charcoal },
-  histDate:    { fontFamily: Fonts.regular, fontSize: 12, color: Colors.steelGray, marginTop: 1 },
-  histAmount:  { fontFamily: Fonts.bold, fontSize: 14, color: Colors.growth },
-  histSummary: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingTop: Spacing.two, borderTopWidth: 1, borderTopColor: Colors.coolGray, marginTop: Spacing.one },
-  histSummaryLabel: { fontFamily: Fonts.semiBold, fontSize: 13, color: Colors.steelGray },
-  histSummaryValue: { fontFamily: Fonts.bold, fontSize: 15, color: Colors.growth },
+  timelineRow:     { flexDirection: 'row', gap: Spacing.two },
+  timelineTrack:   { width: 20, alignItems: 'center', paddingTop: 3 },
+  timelineDot:     { width: 12, height: 12, borderRadius: 6, flexShrink: 0 },
+  timelineLine:    { width: 2, flex: 1, backgroundColor: Colors.coolGray, marginTop: 4, marginBottom: -4 },
+  timelineContent: { flex: 1 },
+  timelineTop:     { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flexWrap: 'wrap' },
+  timelineAction:  { fontFamily: Fonts.semiBold, fontSize: 14 },
+  timelineAmtBadge:{ borderRadius: 8, paddingHorizontal: 8, paddingVertical: 2 },
+  timelineAmt:     { fontFamily: Fonts.bold, fontSize: 13 },
+  timelineDate:    { fontFamily: Fonts.regular, fontSize: 12, color: Colors.steelGray, marginTop: 3 },
+  timelineUser:    { fontFamily: Fonts.regular, fontSize: 12, color: Colors.iconMuted, marginTop: 1 },
+  timelineNote:    { fontFamily: Fonts.regular, fontSize: 12, color: Colors.charcoal, marginTop: 3, fontStyle: 'italic' },
 });
