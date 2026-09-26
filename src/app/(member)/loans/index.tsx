@@ -28,10 +28,6 @@ export default function LoansScreen() {
           <Text style={styles.applyLabel}>+ Demander</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.subHeader}>
-        <Text style={styles.subLabel}>MES PRÊTS</Text>
-      </View>
-
       {loading ? (
         <ActivityIndicator color={Colors.primary} style={{ marginTop: 60 }} />
       ) : (
@@ -72,8 +68,6 @@ export default function LoansScreen() {
 
 const styles = StyleSheet.create({
   header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  subHeader: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three, paddingBottom: Spacing.two, borderBottomWidth: 1, borderBottomColor: Colors.coolGray, backgroundColor: Colors.white, marginBottom: Spacing.three },
-  subLabel: { fontFamily: Fonts.bold, fontSize: 13, color: Colors.primary, letterSpacing: 0.8 },
   title: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white },
   applyBtn: { backgroundColor: Colors.green, borderRadius: 20, paddingHorizontal: Spacing.three, paddingVertical: Spacing.one + 2 },
   applyLabel: { fontFamily: Fonts.semiBold, fontSize: 15, color: Colors.white },
