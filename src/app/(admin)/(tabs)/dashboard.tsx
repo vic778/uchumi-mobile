@@ -227,7 +227,7 @@ export default function AdminDashboardScreen() {
         <View style={styles.card}>
           <View style={styles.cardHeader}>
             <Text style={styles.sectionTitle}>PRÊTS RÉCENTS</Text>
-            <TouchableOpacity onPress={() => router.push('/(admin)/(tabs)/loans/index' as any)}>
+            <TouchableOpacity onPress={() => router.push('/(admin)/(tabs)/loans' as any)}>
               <Text style={styles.seeAll}>Voir tout →</Text>
             </TouchableOpacity>
           </View>

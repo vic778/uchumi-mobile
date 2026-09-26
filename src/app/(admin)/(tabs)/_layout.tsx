@@ -57,11 +57,11 @@ function PlusIcon({ color }: { color: string }) {
 }
 
 const TABS = [
-  { name: 'dashboard',     label: 'Tableau', Icon: DashIcon,    href: '/(admin)/(tabs)/dashboard' },
-  { name: 'members/index', label: 'Membres', Icon: MembersIcon, href: '/(admin)/(tabs)/members/index' },
-  { name: 'kyc/index',     label: 'KYC',     Icon: KycIcon,     href: '/(admin)/(tabs)/kyc/index' },
-  { name: 'loans/index',   label: 'Prêts',   Icon: LoansIcon,   href: '/(admin)/(tabs)/loans/index' },
-  { name: 'profile/index', label: 'Plus',    Icon: PlusIcon,    href: '/(admin)/(tabs)/profile/index' },
+  { name: 'dashboard', label: 'Tableau', Icon: DashIcon,    href: '/(admin)/(tabs)/dashboard' },
+  { name: 'members',   label: 'Membres', Icon: MembersIcon, href: '/(admin)/(tabs)/members' },
+  { name: 'kyc',       label: 'KYC',     Icon: KycIcon,     href: '/(admin)/(tabs)/kyc' },
+  { name: 'loans',     label: 'Prêts',   Icon: LoansIcon,   href: '/(admin)/(tabs)/loans' },
+  { name: 'profile',   label: 'Plus',    Icon: PlusIcon,    href: '/(admin)/(tabs)/profile' },
 ];
 
 function AdminTabBar({ state }: any) {
@@ -101,10 +101,10 @@ export default function AdminTabsLayout() {
       screenOptions={{ headerShown: false }}
       tabBar={(props) => <AdminTabBar {...props} />}>
       <Tabs.Screen name="dashboard" />
-      <Tabs.Screen name="members/index" />
-      <Tabs.Screen name="kyc/index" />
-      <Tabs.Screen name="loans/index" />
-      <Tabs.Screen name="profile/index" />
+      <Tabs.Screen name="members" />
+      <Tabs.Screen name="kyc" />
+      <Tabs.Screen name="loans" />
+      <Tabs.Screen name="profile" />
     </Tabs>
   );
 }
