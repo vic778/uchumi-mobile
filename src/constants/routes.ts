@@ -4,15 +4,15 @@ export const Routes = {
   register: '/(auth)/register',
 
   // member
-  memberDashboard:   '/(member)/dashboard',
-  memberTransactions: '/(member)/transactions',
-  memberSavings:     '/(member)/savings',
-  memberLoans:       '/(member)/loans',
-  memberLoanApply:   '/(member)/loans/apply',
-  memberWithdrawals: '/(member)/withdrawals',
-  memberDocuments:   '/(member)/documents',
-  memberNotifications: '/(member)/notifications',
-  memberProfile:     '/(member)/profile',
+  memberDashboard:     '/(member)/(tabs)/dashboard',
+  memberTransactions:  '/(member)/transactions',
+  memberSavings:       '/(member)/(tabs)/savings',
+  memberLoans:         '/(member)/(tabs)/loans',
+  memberLoanApply:     '/(member)/loans/apply',
+  memberWithdrawals:   '/(member)/withdrawals',
+  memberDocuments:     '/(member)/documents',
+  memberNotifications: '/(member)/(tabs)/notifications',
+  memberProfile:       '/(member)/(tabs)/profile',
 
   // collector
   collectorDashboard: '/(collector)/dashboard',
