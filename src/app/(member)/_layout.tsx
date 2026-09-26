@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { Tabs, router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path, Circle } from 'react-native-svg';
@@ -60,7 +60,15 @@ const TABS = [
   { name: 'profile',       label: 'Plus',    Icon: MoreIcon },
 ];
 
-function TabBar({ state, navigation }: any) {
+const TAB_HREFS: Record<string, string> = {
+  dashboard:     '/(member)/dashboard',
+  savings:       '/(member)/savings',
+  loans:         '/(member)/loans',
+  notifications: '/(member)/notifications',
+  profile:       '/(member)/profile',
+};
+
+function TabBar({ state }: any) {
   const insets = useSafeAreaInsets();
   const currentRoute = state.routes[state.index]?.name ?? '';
 
@@ -76,7 +84,7 @@ function TabBar({ state, navigation }: any) {
               accessibilityRole="button"
               accessibilityLabel={tab.label}
               accessibilityState={{ selected: isActive }}
-              onPress={() => navigation.dispatch({ type: 'JUMP_TO', payload: { name: tab.name } })}
+              onPress={() => { if (!isActive) router.navigate(TAB_HREFS[tab.name] as any); }}
               style={({ pressed }) => [styles.tab, pressed && styles.pressed]}>
               <tab.Icon color={color} />
               <Text style={[styles.label, { color }]}>{tab.label}</Text>
