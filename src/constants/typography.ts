@@ -16,8 +16,8 @@ export const Typography = {
   },
   label: {
     fontFamily: Fonts.regular,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 16,
+    lineHeight: 22,
     color: Colors.steelGray,
   },
   button: {
