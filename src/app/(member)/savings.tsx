@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MemberTabBar } from '@/components/navigation/member-tab-bar';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getAccount } from '@/services/member/account';
 import type { Account } from '@/types';
@@ -9,7 +8,6 @@ import type { Account } from '@/types';
 const CURRENCY = 'CDF';
 const fmt = (n: number) => n.toLocaleString('fr-CD') + ' ' + CURRENCY;
 const FREQ: Record<string, string> = { daily: 'Quotidien', weekly: 'Hebdomadaire', monthly: 'Mensuel' };
-const TAB_BAR_H = 70;
 
 export default function SavingsScreen() {
   const insets = useSafeAreaInsets();
@@ -34,7 +32,7 @@ export default function SavingsScreen() {
         <ActivityIndicator color={Colors.primary} style={{ marginTop: 60 }} />
       ) : (
         <ScrollView
-          contentContainerStyle={[styles.scroll, { paddingBottom: TAB_BAR_H + insets.bottom + Spacing.four }]}
+          contentContainerStyle={[styles.scroll, { paddingBottom: Spacing.four }]}
           showsVerticalScrollIndicator={false}>
 
           <View style={styles.accountCard}>
@@ -67,7 +65,6 @@ export default function SavingsScreen() {
         </ScrollView>
       )}
 
-      <MemberTabBar active="savings" />
     </View>
   );
 }
