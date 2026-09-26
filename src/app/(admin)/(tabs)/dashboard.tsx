@@ -3,8 +3,9 @@ import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, Toucha
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, G, Line, Path, Rect, Text as SvgText } from 'react-native-svg';
+import { TxDetailModal, type TxDetailData } from '@/components/ui/tx-detail-modal';
 import { Colors, Fonts, Spacing } from '@/constants';
-import { getDashboard, type AdminDashboard } from '@/services/admin';
+import { getDashboard, type AdminDashboard, type AdminTransaction } from '@/services/admin';
 
 const CURRENCY = 'CDF';
 const fmt  = (n: number) => n.toLocaleString('fr-CD');
@@ -160,6 +161,15 @@ function ComboChart({ labels, deposits, loans, ratio }: {
   );
 }
 
+function BellIcon({ color }: { color: string }) {
+  return (
+    <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
+      <Path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M13.73 21a2 2 0 0 1-3.46 0" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
+    </Svg>
+  );
+}
+
 // ─── Screen ──────────────────────────────────────────────────────────────────
 export default function AdminDashboardScreen() {
   const insets = useSafeAreaInsets();
@@ -167,6 +177,7 @@ export default function AdminDashboardScreen() {
   const [data, setData]           = useState<AdminDashboard | null>(null);
   const [loading, setLoading]     = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedTx, setSelectedTx] = useState<TxDetailData | null>(null);
 
   const load = useCallback(async () => {
     try { setData(await getDashboard()); } catch {}
@@ -191,9 +202,9 @@ export default function AdminDashboardScreen() {
 
   return (
     <View style={styles.root}>
-      {/* Header — same style as member/collector */}
+      {/* Header */}
       <View style={[styles.header, { paddingTop: insets.top + 14 }]}>
-        <View>
+        <View style={{ flex: 1 }}>
           <Text style={styles.headerSub}>ADMINISTRATION</Text>
           <Text style={styles.headerTitle}>Tableau de bord</Text>
         </View>
@@ -202,6 +213,12 @@ export default function AdminDashboardScreen() {
             <Text style={styles.alertPillText}>{pending} en attente</Text>
           </TouchableOpacity>
         )}
+        <TouchableOpacity
+          style={styles.bellBtn}
+          onPress={() => router.push('/(admin)/notifications' as any)}
+          activeOpacity={0.75}>
+          <BellIcon color={Colors.white} />
+        </TouchableOpacity>
       </View>
 
       <ScrollView
@@ -312,7 +329,7 @@ export default function AdminDashboardScreen() {
         <View style={styles.card}>
           <View style={styles.cardHeader}>
             <Text style={styles.cardTitle}>Transactions récentes</Text>
-            <TouchableOpacity onPress={() => router.push('/(admin)/withdrawals' as any)}>
+            <TouchableOpacity onPress={() => router.push('/(admin)/transactions' as any)}>
               <Text style={styles.seeAll}>Voir tout →</Text>
             </TouchableOpacity>
           </View>
@@ -330,14 +347,18 @@ export default function AdminDashboardScreen() {
             const amtClr  = meta.credit ? Colors.growth : Colors.danger;
             const sign    = meta.credit ? '+' : '−';
             return (
-              <View key={t.id} style={styles.tableRow}>
+              <TouchableOpacity
+                key={t.id}
+                style={styles.tableRow}
+                onPress={() => setSelectedTx({ ...t })}
+                activeOpacity={0.7}>
                 <Text style={[styles.tdName, { flex: 2 }]} numberOfLines={1}>{t.member ?? '—'}</Text>
                 <View style={styles.tdKindWrap}>
                   <View style={[styles.txDot, { backgroundColor: amtClr }]} />
                   <Text style={styles.tdKind}>{meta.label}</Text>
                 </View>
                 <Text style={[styles.tdAmount, { color: amtClr }]}>{sign}{fmtK(t.amount)}</Text>
-              </View>
+              </TouchableOpacity>
             );
           })}
         </View>
@@ -377,6 +398,8 @@ export default function AdminDashboardScreen() {
           })}
         </View>
       </ScrollView>
+
+      <TxDetailModal tx={selectedTx} onClose={() => setSelectedTx(null)} />
     </View>
   );
 }
@@ -397,6 +420,7 @@ const styles = StyleSheet.create({
   headerTitle: { fontFamily: Fonts.bold, fontSize: 22, color: '#fff' },
   alertPill:   { backgroundColor: Colors.danger, borderRadius: 20, paddingHorizontal: 12, paddingVertical: 6 },
   alertPillText: { fontFamily: Fonts.bold, fontSize: 12, color: '#fff' },
+  bellBtn:     { width: 38, height: 38, borderRadius: 19, backgroundColor: 'rgba(255,255,255,0.18)', alignItems: 'center', justifyContent: 'center', marginLeft: Spacing.two },
 
   scroll: { padding: Spacing.four, gap: Spacing.three },
 
