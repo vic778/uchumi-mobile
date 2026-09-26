@@ -281,11 +281,11 @@ const styles = StyleSheet.create({
 
   // Filters
   filterScroll: { backgroundColor: Colors.white, borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
-  filterRow:    { flexDirection: 'row', gap: 6, paddingHorizontal: Spacing.three, paddingVertical: 8 },
-  filterChip:   { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20, borderWidth: 1, borderColor: Colors.muted },
-  filterChipActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
-  filterLabel:      { fontFamily: Fonts.medium, fontSize: 11, color: Colors.steelGray },
-  filterLabelActive:{ color: Colors.white },
+  filterRow:    { flexDirection: 'row', gap: 8, paddingHorizontal: Spacing.three, paddingVertical: 10 },
+  filterChip:   { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20, backgroundColor: '#f1f5f9' },
+  filterChipActive: { backgroundColor: Colors.primary },
+  filterLabel:      { fontFamily: Fonts.medium, fontSize: 12, color: Colors.steelGray },
+  filterLabelActive:{ fontFamily: Fonts.semiBold, color: Colors.white },
 
   // List
   list: { padding: Spacing.three, gap: Spacing.two + 2, paddingBottom: Spacing.six },
