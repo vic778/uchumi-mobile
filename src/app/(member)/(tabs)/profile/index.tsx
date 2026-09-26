@@ -1,12 +1,19 @@
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { logout } from '@/services/auth';
+import { useAppLock } from '@/context/app-lock-context';
 
-
-type MenuItem = { label: string; icon: string; onPress: () => void; danger?: boolean };
+type MenuItem = {
+  label: string;
+  icon: string;
+  onPress?: () => void;
+  danger?: boolean;
+  switchValue?: boolean;
+  onSwitchChange?: (v: boolean) => void;
+};
 
 function ChevronRight() {
   return (
@@ -19,6 +26,7 @@ function ChevronRight() {
 export default function MemberProfileScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const { enabled: lockEnabled, toggle: toggleLock } = useAppLock();
 
   const handleLogout = () => {
     Alert.alert('Déconnexion', 'Êtes-vous sûr de vouloir vous déconnecter ?', [
@@ -39,6 +47,17 @@ export default function MemberProfileScreen() {
         { label: 'Mes retraits',         icon: '💸', onPress: () => router.push('/(member)/withdrawals' as any) },
         { label: 'Mes prêts',            icon: '💳', onPress: () => router.push('/(member)/loans' as any) },
         { label: 'Notifications',        icon: '🔔', onPress: () => router.push('/(member)/notifications' as any) },
+      ],
+    },
+    {
+      title: 'Sécurité',
+      items: [
+        {
+          label: 'Verrouillage biométrique',
+          icon: '🔐',
+          switchValue: lockEnabled,
+          onSwitchChange: toggleLock,
+        },
       ],
     },
     {
@@ -74,15 +93,18 @@ export default function MemberProfileScreen() {
               <TouchableOpacity
                 key={ii}
                 style={[styles.menuRow, ii < section.items.length - 1 && styles.menuBorder]}
-                onPress={item.onPress}
-                activeOpacity={0.7}>
+                onPress={item.switchValue !== undefined ? undefined : item.onPress}
+                activeOpacity={item.switchValue !== undefined ? 1 : 0.7}
+                disabled={item.switchValue !== undefined}>
                 <View style={styles.menuLeft}>
                   <View style={styles.menuIconWrap}>
                     <Text style={styles.menuIcon}>{item.icon}</Text>
                   </View>
                   <Text style={[styles.menuLabel, item.danger && { color: Colors.danger }]}>{item.label}</Text>
                 </View>
-                <ChevronRight />
+                {item.switchValue !== undefined
+                  ? <Switch value={item.switchValue} onValueChange={item.onSwitchChange} trackColor={{ true: Colors.primary }} thumbColor={Colors.white} />
+                  : <ChevronRight />}
               </TouchableOpacity>
             ))}
           </View>
