@@ -11,8 +11,8 @@ export async function getAccounts(): Promise<Account[]> {
   return res.data.data;
 }
 
-export async function getTransactions(): Promise<Transaction[]> {
-  const res = await api.get<{ data: Transaction[] }>('/member/transactions');
+export async function getTransactions(params?: { kind?: string; period?: string }): Promise<Transaction[]> {
+  const res = await api.get<{ data: Transaction[] }>('/member/transactions', { params });
   return res.data.data;
 }
 
