@@ -45,10 +45,9 @@ export default function CollectorProfileScreen() {
       // Collector-exclusive privileged actions
       title: 'Espace collecteur',
       items: [
-        { label: 'Dépôt pour un membre',     icon: '💰', onPress: () => router.push('/(collector)/deposits/new' as any) },
-        { label: 'Retraits à décaisser',      icon: '🏦', onPress: () => router.push('/(collector)/withdrawals' as any) },
-        { label: 'KYC pour un membre',        icon: '🪪', onPress: () => router.push('/(collector)/kyc/new' as any) },
-        { label: 'Liste des membres',         icon: '👥', onPress: () => router.push('/(collector)/members' as any) },
+        { label: 'Dépôt pour un membre',  icon: '💰', onPress: () => router.push('/(collector)/deposits/new' as any) },
+        { label: 'Retraits à décaisser', icon: '🏦', onPress: () => router.push('/(collector)/withdrawals' as any) },
+        { label: 'KYC pour un membre',   icon: '🪪', onPress: () => router.push('/(collector)/kyc/new' as any) },
       ],
     },
     {
