@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { Bell } from 'lucide-react-native';
+import { Bell, ArrowUpFromLine, CreditCard, PiggyBank, Clock } from 'lucide-react-native';
 import { TxIcon } from '@/components/ui/tx-icon';
 import { Colors, Fonts, Routes, Spacing } from '@/constants';
 import { getAccount, getTransactions } from '@/services/member/account';
@@ -88,10 +88,10 @@ export default function CollectorDashboard() {
               <Text style={styles.sectionLabel}>OPÉRATIONS RAPIDES</Text>
             </View>
             <View style={styles.actionsGrid}>
-              <QuickAction icon="💸" label="Retrait"    onPress={() => router.push(Routes.memberWithdrawals as any)} />
-              <QuickAction icon="💳" label="Crédit"     onPress={() => router.push(Routes.memberLoans as any)} />
-              <QuickAction icon="💰" label="Dépôt"      onPress={() => router.push('/(collector)/deposits/new' as any)} />
-              <QuickAction icon="📊" label="Historique" onPress={() => router.push(Routes.memberTransactions as any)} />
+              <QuickAction icon={<ArrowUpFromLine size={22} color={Colors.primary} strokeWidth={1.8} />} label="Retrait"    onPress={() => router.push(Routes.memberWithdrawals as any)} />
+              <QuickAction icon={<CreditCard      size={22} color={Colors.primary} strokeWidth={1.8} />} label="Crédit"     onPress={() => router.push(Routes.memberLoans as any)} />
+              <QuickAction icon={<PiggyBank       size={22} color={Colors.primary} strokeWidth={1.8} />} label="Dépôt"      onPress={() => router.push('/(collector)/deposits/new' as any)} />
+              <QuickAction icon={<Clock           size={22} color={Colors.primary} strokeWidth={1.8} />} label="Historique" onPress={() => router.push(Routes.memberTransactions as any)} />
             </View>
 
             <View style={[styles.sectionHeader, { marginTop: Spacing.two }]}>
@@ -116,11 +116,11 @@ export default function CollectorDashboard() {
   );
 }
 
-function QuickAction({ icon, label, onPress }: { icon: string; label: string; onPress: () => void }) {
+function QuickAction({ icon, label, onPress }: { icon: React.ReactNode; label: string; onPress: () => void }) {
   return (
     <TouchableOpacity style={styles.actionItem} onPress={onPress} activeOpacity={0.75}>
       <View style={styles.actionIconWrap}>
-        <Text style={styles.actionEmoji}>{icon}</Text>
+        {icon}
       </View>
       <View style={{ flex: 1 }}>
         <Text style={styles.actionLabel}>{label}</Text>
@@ -190,7 +190,6 @@ const styles = StyleSheet.create({
   actionsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.three, marginBottom: Spacing.three },
   actionItem: { width: '47%', backgroundColor: Colors.white, borderWidth: 1, borderColor: Colors.coolGray, borderRadius: 14, padding: Spacing.three, flexDirection: 'row', alignItems: 'center', gap: Spacing.three, elevation: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 3 },
   actionIconWrap: { width: 38, height: 38, borderRadius: 10, backgroundColor: '#e8f4f8', alignItems: 'center', justifyContent: 'center' },
-  actionEmoji: { fontSize: 18 },
   actionLabel: { fontFamily: Fonts.bold, fontSize: 15, color: Colors.charcoal, flexShrink: 1 },
 
   activityCard: { backgroundColor: Colors.white, borderRadius: 14, overflow: 'hidden', borderWidth: 1, borderColor: Colors.coolGray, elevation: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 3 },

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { Bell } from 'lucide-react-native';
+import { Bell, ArrowUpFromLine, CreditCard, PiggyBank, Clock } from 'lucide-react-native';
 import { TxIcon } from '@/components/ui/tx-icon';
 import { Colors, Fonts, Routes, Spacing } from '@/constants';
 import { getAccount, getTransactions } from '@/services/member/account';
@@ -91,10 +91,10 @@ export default function MemberDashboard() {
               <Text style={styles.sectionLabel}>OPÉRATIONS RAPIDES</Text>
             </View>
             <View style={styles.actionsGrid}>
-              <QuickAction icon="💸" label="Retrait" onPress={() => router.push(Routes.memberWithdrawals as any)} />
-              <QuickAction icon="💳" label="Crédit" onPress={() => router.push(Routes.memberLoans as any)} />
-              <QuickAction icon="💰" label="Dépôt" onPress={() => {}} disabled />
-              <QuickAction icon="📊" label="Historique" onPress={() => router.push(Routes.memberTransactions as any)} />
+              <QuickAction icon={<ArrowUpFromLine size={22} color={Colors.primary} strokeWidth={1.8} />} label="Retrait"    onPress={() => router.push(Routes.memberWithdrawals as any)} />
+              <QuickAction icon={<CreditCard      size={22} color={Colors.primary} strokeWidth={1.8} />} label="Crédit"     onPress={() => router.push(Routes.memberLoans as any)} />
+              <QuickAction icon={<PiggyBank       size={22} color={Colors.primary} strokeWidth={1.8} />} label="Dépôt"      onPress={() => {}} disabled />
+              <QuickAction icon={<Clock           size={22} color={Colors.primary} strokeWidth={1.8} />} label="Historique" onPress={() => router.push(Routes.memberTransactions as any)} />
             </View>
 
             {/* Recent activity */}
@@ -121,11 +121,11 @@ export default function MemberDashboard() {
   );
 }
 
-function QuickAction({ icon, label, onPress, disabled }: { icon: string; label: string; onPress: () => void; disabled?: boolean }) {
+function QuickAction({ icon, label, onPress, disabled }: { icon: React.ReactNode; label: string; onPress: () => void; disabled?: boolean }) {
   return (
     <TouchableOpacity style={[styles.actionItem, disabled && styles.actionItemDisabled]} onPress={onPress} activeOpacity={disabled ? 1 : 0.75} disabled={disabled}>
       <View style={[styles.actionIconWrap, disabled && styles.actionIconWrapDisabled]}>
-        <Text style={styles.actionEmoji}>{icon}</Text>
+        {icon}
       </View>
       <View style={{ flex: 1 }}>
         <Text style={[styles.actionLabel, disabled && styles.actionLabelDisabled]}>{label}</Text>
@@ -200,7 +200,6 @@ const styles = StyleSheet.create({
   actionsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.three, marginBottom: Spacing.three },
   actionItem: { width: '47%', backgroundColor: Colors.white, borderWidth: 1, borderColor: Colors.coolGray, borderRadius: 14, padding: Spacing.three, flexDirection: 'row', alignItems: 'center', gap: Spacing.three, elevation: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 3 },
   actionIconWrap: { width: 38, height: 38, borderRadius: 10, backgroundColor: '#e8f4f8', alignItems: 'center', justifyContent: 'center' },
-  actionEmoji: { fontSize: 18 },
   actionLabel: { fontFamily: Fonts.bold, fontSize: 15, color: Colors.charcoal, flexShrink: 1 },
   actionItemDisabled: { opacity: 0.55, borderStyle: 'dashed' },
   actionIconWrapDisabled: { backgroundColor: Colors.coolGray },
