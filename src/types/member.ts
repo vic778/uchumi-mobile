@@ -3,20 +3,19 @@ export type SavingsPlan = {
   name: string;
   frequency: 'daily' | 'weekly' | 'monthly';
   amount: number;
-  status: string;
+  active: boolean;
 };
 
 export type Account = {
   id: number;
   balance: number;
   savings_plan: SavingsPlan | null;
-  status: string;
   member_since: string;
 };
 
 export type Transaction = {
   id: number;
-  kind: 'deposit' | 'withdrawal' | 'loan_disbursement' | 'loan_payment';
+  kind: 'deposit' | 'withdrawal' | 'loan_credit' | 'transfer_to_blocked' | 'transfer_from_blocked';
   amount: number;
   created_at: string;
   note?: string;
