@@ -1,29 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BackButton } from '@/components/ui/back-button';
+import { LoanTimeline } from '@/components/admin/loan-timeline';
+import { LoanActionsCard } from '@/components/admin/loan-actions';
 import { Colors, Fonts, Spacing } from '@/constants';
-import { getLoan, approveLoan, fundLoan, rejectLoan, repayLoan, type AdminLoanDetail, type LoanLog } from '@/services/admin';
+import { getLoan, approveLoan, fundLoan, rejectLoan, repayLoan, type AdminLoanDetail } from '@/services/admin';
 
 const ADMIN_DARK  = '#0f172a';
-const ADMIN_AMBER = '#f59e0b';
-const CURRENCY    = 'CDF';
 const fmt  = (n: number) => n.toLocaleString('fr-CD');
 const fmtD = (s: string) => new Date(s).toLocaleDateString('fr-CD', { day: '2-digit', month: 'short', year: 'numeric' });
 
-const LOG_META: Record<string, { color: string; bg: string }> = {
-  submitted:     { color: Colors.steelGray, bg: Colors.coolGray },
-  offer_sent:    { color: '#a78bfa',        bg: '#a78bfa22' },
-  member_agreed: { color: '#60a5fa',        bg: '#60a5fa22' },
-  approved:      { color: Colors.primary,   bg: Colors.primary + '18' },
-  rejected:      { color: Colors.danger,    bg: Colors.danger + '18' },
-  disbursed:     { color: Colors.growth,    bg: Colors.growth + '18' },
-  repaid:        { color: '#0ea5e9',        bg: '#0ea5e918' },
-};
-
 const STATUS_COLORS: Record<string, string> = {
-  pending:       ADMIN_AMBER,
+  pending:       '#f59e0b',
   offer_sent:    '#a78bfa',
   member_agreed: '#60a5fa',
   approved:      Colors.primary,
@@ -71,7 +61,7 @@ export default function AdminLoanDetailScreen() {
     </View>
   );
 
-  const l = loan!;
+  const l      = loan!;
   const color  = STATUS_COLORS[l.status] ?? Colors.steelGray;
   const pctPaid = l.outstanding_amount > 0 && l.amount > 0
     ? Math.round(((l.amount - l.outstanding_amount) / l.amount) * 100)
@@ -104,19 +94,17 @@ export default function AdminLoanDetailScreen() {
           <View style={styles.amountRow}>
             <View>
               <Text style={styles.amountLabel}>Montant demandé</Text>
-              <Text style={styles.amountValue}>{fmt(l.amount)} {CURRENCY}</Text>
+              <Text style={styles.amountValue}>{fmt(l.amount)} CDF</Text>
             </View>
             {l.outstanding_amount > 0 && (
               <View style={{ alignItems: 'flex-end' }}>
                 <Text style={styles.amountLabel}>Restant dû</Text>
-                <Text style={[styles.amountValue, { color: Colors.danger }]}>{fmt(l.outstanding_amount)} {CURRENCY}</Text>
+                <Text style={[styles.amountValue, { color: Colors.danger }]}>{fmt(l.outstanding_amount)} CDF</Text>
               </View>
             )}
           </View>
           <Text style={styles.ref}>{l.reference} · {fmtD(l.created_at)}</Text>
           {l.notes && <Text style={styles.notes}>📝 {l.notes}</Text>}
-
-          {/* Progress bar */}
           {l.status === 'active' && (
             <View style={styles.progressWrap}>
               <View style={styles.progressBg}>
@@ -127,7 +115,7 @@ export default function AdminLoanDetailScreen() {
           )}
         </View>
 
-        {/* Installments */}
+        {/* Installment schedule */}
         {l.installments.length > 0 && (
           <View style={styles.card}>
             <Text style={styles.sectionLabel}>ÉCHÉANCIER</Text>
@@ -137,197 +125,72 @@ export default function AdminLoanDetailScreen() {
                 <Text style={styles.installNum}>#{i + 1}</Text>
                 <Text style={styles.installDate}>{inst.due_date ? fmtD(inst.due_date) : '—'}</Text>
                 <View style={{ flex: 1 }} />
-                <Text style={[styles.installAmt, inst.paid && { color: Colors.growth }]}>{fmt(inst.amount)} {CURRENCY}</Text>
+                <Text style={[styles.installAmt, inst.paid && { color: Colors.growth }]}>{fmt(inst.amount)} CDF</Text>
                 {inst.paid && <Text style={styles.installPaid}>✓</Text>}
               </View>
             ))}
           </View>
         )}
 
-        {/* Loan history timeline */}
-        {l.logs.length > 0 && (
-          <View style={styles.card}>
-            <Text style={styles.sectionLabel}>HISTORIQUE DU PRÊT</Text>
-            {l.logs.map((log, idx) => {
-              const isLast    = idx === l.logs.length - 1;
-              const meta      = LOG_META[log.action] ?? { color: Colors.steelGray, bg: Colors.coolGray };
-              const fmtFull   = (s: string) => new Date(s).toLocaleDateString('fr-CD', {
-                day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
-              });
-              return (
-                <View key={log.id} style={styles.timelineRow}>
-                  {/* Vertical connector */}
-                  <View style={styles.timelineTrack}>
-                    <View style={[styles.timelineDot, { backgroundColor: meta.color }]} />
-                    {!isLast && <View style={styles.timelineLine} />}
-                  </View>
-                  {/* Content */}
-                  <View style={[styles.timelineContent, !isLast && { paddingBottom: Spacing.three }]}>
-                    <View style={styles.timelineTop}>
-                      <Text style={[styles.timelineAction, { color: meta.color }]}>{log.action_label}</Text>
-                      {log.notes && log.action === 'repaid' && (
-                        <View style={[styles.timelineAmtBadge, { backgroundColor: Colors.growth + '18' }]}>
-                          <Text style={[styles.timelineAmt, { color: Colors.growth }]}>−{log.notes}</Text>
-                        </View>
-                      )}
-                      {log.action === 'disbursed' && l.disbursed_amount && (
-                        <View style={[styles.timelineAmtBadge, { backgroundColor: Colors.primary + '18' }]}>
-                          <Text style={[styles.timelineAmt, { color: Colors.primary }]}>+{fmt(l.disbursed_amount)} {CURRENCY}</Text>
-                        </View>
-                      )}
-                    </View>
-                    <Text style={styles.timelineDate}>{fmtFull(log.created_at)}</Text>
-                    {log.user_name && (
-                      <Text style={styles.timelineUser}>par {log.user_name}</Text>
-                    )}
-                    {log.notes && log.action !== 'repaid' && (
-                      <Text style={styles.timelineNote}>{log.notes}</Text>
-                    )}
-                  </View>
-                </View>
-              );
-            })}
-          </View>
-        )}
+        <LoanTimeline logs={l.logs} disbursedAmount={l.disbursed_amount} />
 
-        {/* Actions by status */}
-        {l.status === 'pending' && (
-          <View style={styles.card}>
-            <Text style={styles.sectionLabel}>ACTIONS</Text>
-            <View style={styles.actionsRow}>
-              <TouchableOpacity
-                style={[styles.btn, styles.btnPrimary]}
-                disabled={acting}
-                onPress={() => Alert.alert('Approuver', 'Approuver ce prêt ?', [
-                  { text: 'Annuler', style: 'cancel' },
-                  { text: 'Approuver', onPress: () => doAction(() => approveLoan(ref)) },
-                ])}
-                activeOpacity={0.85}>
-                <Text style={[styles.btnText, { color: Colors.white }]}>Approuver</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.divider} />
-            <Text style={styles.fieldLabel}>Motif de refus</Text>
-            <TextInput
-              style={styles.notesInput}
-              placeholder="Raison du refus..."
-              placeholderTextColor={Colors.iconMuted}
-              value={rejectNotes}
-              onChangeText={setRejectNotes}
-              multiline
-              numberOfLines={2}
-            />
-            <TouchableOpacity
-              style={[styles.btn, styles.btnReject]}
-              disabled={acting}
-              onPress={() => Alert.alert('Refuser', 'Refuser ce prêt ?', [
-                { text: 'Annuler', style: 'cancel' },
-                { text: 'Refuser', style: 'destructive', onPress: () => doAction(() => rejectLoan(ref, rejectNotes || undefined)) },
-              ])}
-              activeOpacity={0.85}>
-              <Text style={[styles.btnText, { color: Colors.danger }]}>Refuser</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
-        {l.status === 'approved' && (
-          <View style={styles.card}>
-            <Text style={styles.sectionLabel}>ACTIONS</Text>
-            <TouchableOpacity
-              style={[styles.btn, styles.btnPrimary]}
-              disabled={acting}
-              onPress={() => Alert.alert('Décaisser', 'Décaisser les fonds pour ce prêt ?', [
-                { text: 'Annuler', style: 'cancel' },
-                { text: 'Décaisser', onPress: () => doAction(() => fundLoan(ref)) },
-              ])}
-              activeOpacity={0.85}>
-              <Text style={[styles.btnText, { color: Colors.white }]}>Décaisser les fonds</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
-        {l.status === 'active' && (
-          <View style={styles.card}>
-            <Text style={styles.sectionLabel}>ENREGISTRER UN REMBOURSEMENT</Text>
-            <TextInput
-              style={styles.amountInput}
-              placeholder={`Montant en ${CURRENCY}`}
-              placeholderTextColor={Colors.iconMuted}
-              keyboardType="numeric"
-              value={repayAmount}
-              onChangeText={setRepayAmount}
-            />
-            <TouchableOpacity
-              style={[styles.btn, styles.btnPrimary, !repayAmount && styles.btnDisabled]}
-              disabled={acting || !repayAmount}
-              onPress={() => Alert.alert('Remboursement', `Enregistrer ${repayAmount} ${CURRENCY} ?`, [
-                { text: 'Annuler', style: 'cancel' },
-                { text: 'Confirmer', onPress: () => doAction(() => repayLoan(ref, Number(repayAmount))) },
-              ])}
-              activeOpacity={0.85}>
-              <Text style={[styles.btnText, { color: Colors.white }]}>Enregistrer</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+        <LoanActionsCard
+          status={l.status}
+          acting={acting}
+          rejectNotes={rejectNotes}
+          repayAmount={repayAmount}
+          onRejectNotesChange={setRejectNotes}
+          onRepayAmountChange={setRepayAmount}
+          onApprove={() => Alert.alert('Approuver', 'Approuver ce prêt ?', [
+            { text: 'Annuler', style: 'cancel' },
+            { text: 'Approuver', onPress: () => doAction(() => approveLoan(ref)) },
+          ])}
+          onFund={() => Alert.alert('Décaisser', 'Décaisser les fonds pour ce prêt ?', [
+            { text: 'Annuler', style: 'cancel' },
+            { text: 'Décaisser', onPress: () => doAction(() => fundLoan(ref)) },
+          ])}
+          onReject={() => Alert.alert('Refuser', 'Refuser ce prêt ?', [
+            { text: 'Annuler', style: 'cancel' },
+            { text: 'Refuser', style: 'destructive', onPress: () => doAction(() => rejectLoan(ref, rejectNotes || undefined)) },
+          ])}
+          onRepay={() => Alert.alert('Remboursement', `Enregistrer ${repayAmount} CDF ?`, [
+            { text: 'Annuler', style: 'cancel' },
+            { text: 'Confirmer', onPress: () => doAction(() => repayLoan(ref, Number(repayAmount))) },
+          ])}
+        />
       </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: Colors.background },
-  header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.two },
-  headerTitle: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white, flex: 1, textAlign: 'center' },
-  scroll: { padding: Spacing.four, gap: Spacing.three },
-
-  card: { backgroundColor: Colors.white, borderRadius: 14, padding: Spacing.three, borderWidth: 1, borderColor: Colors.coolGray, gap: Spacing.two },
-  topRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
-  initials: { width: 48, height: 48, borderRadius: 24, backgroundColor: ADMIN_DARK + '12', alignItems: 'center', justifyContent: 'center' },
+  root:         { flex: 1, backgroundColor: Colors.background },
+  header:       { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.two },
+  headerTitle:  { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white, flex: 1, textAlign: 'center' },
+  scroll:       { padding: Spacing.four, gap: Spacing.three },
+  card:         { backgroundColor: Colors.white, borderRadius: 14, padding: Spacing.three, borderWidth: 1, borderColor: Colors.coolGray, gap: Spacing.two },
+  topRow:       { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
+  initials:     { width: 48, height: 48, borderRadius: 24, backgroundColor: ADMIN_DARK + '12', alignItems: 'center', justifyContent: 'center' },
   initialsText: { fontFamily: Fonts.bold, fontSize: 18, color: ADMIN_DARK },
-  memberName:  { fontFamily: Fonts.bold, fontSize: 16, color: Colors.charcoal },
-  memberPhone: { fontFamily: Fonts.regular, fontSize: 13, color: Colors.steelGray },
-  statusBadge: { borderRadius: 10, paddingHorizontal: 10, paddingVertical: 4 },
-  statusText:  { fontFamily: Fonts.bold, fontSize: 11, textTransform: 'uppercase' },
-  divider:     { height: 1, backgroundColor: Colors.coolGray },
-  amountRow:   { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' },
-  amountLabel: { fontFamily: Fonts.regular, fontSize: 12, color: Colors.steelGray },
-  amountValue: { fontFamily: Fonts.bold, fontSize: 20, color: Colors.charcoal },
-  ref:         { fontFamily: Fonts.regular, fontSize: 13, color: Colors.steelGray },
-  notes:       { fontFamily: Fonts.regular, fontSize: 13, color: Colors.charcoal, backgroundColor: Colors.coolGray, borderRadius: 8, padding: Spacing.two },
-
+  memberName:   { fontFamily: Fonts.bold, fontSize: 16, color: Colors.charcoal },
+  memberPhone:  { fontFamily: Fonts.regular, fontSize: 13, color: Colors.steelGray },
+  statusBadge:  { borderRadius: 10, paddingHorizontal: 10, paddingVertical: 4 },
+  statusText:   { fontFamily: Fonts.bold, fontSize: 11, textTransform: 'uppercase' },
+  divider:      { height: 1, backgroundColor: Colors.coolGray },
+  amountRow:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' },
+  amountLabel:  { fontFamily: Fonts.regular, fontSize: 12, color: Colors.steelGray },
+  amountValue:  { fontFamily: Fonts.bold, fontSize: 20, color: Colors.charcoal },
+  ref:          { fontFamily: Fonts.regular, fontSize: 13, color: Colors.steelGray },
+  notes:        { fontFamily: Fonts.regular, fontSize: 13, color: Colors.charcoal, backgroundColor: Colors.coolGray, borderRadius: 8, padding: Spacing.two },
   progressWrap: { gap: 4 },
   progressBg:   { height: 6, backgroundColor: Colors.coolGray, borderRadius: 3, overflow: 'hidden' },
   progressFill: { height: 6, backgroundColor: Colors.green, borderRadius: 3 },
   progressLabel:{ fontFamily: Fonts.regular, fontSize: 12, color: Colors.steelGray },
-
   sectionLabel: { fontFamily: Fonts.bold, fontSize: 11, color: Colors.steelGray, letterSpacing: 0.8 },
-  installRow:  { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
-  installDot:  { width: 8, height: 8, borderRadius: 4 },
-  installNum:  { fontFamily: Fonts.bold, fontSize: 12, color: Colors.steelGray, width: 22 },
-  installDate: { fontFamily: Fonts.regular, fontSize: 13, color: Colors.charcoal },
-  installAmt:  { fontFamily: Fonts.bold, fontSize: 13, color: Colors.charcoal },
-  installPaid: { fontFamily: Fonts.bold, fontSize: 13, color: Colors.growth },
-
-  actionsRow: { flexDirection: 'row', gap: Spacing.two },
-  btn:        { borderRadius: 12, paddingVertical: 13, alignItems: 'center', borderWidth: 1.5 },
-  btnPrimary: { backgroundColor: Colors.primary, borderColor: ADMIN_DARK, flex: 1 },
-  btnReject:  { borderColor: Colors.danger + '50', backgroundColor: Colors.danger + '10', flex: 1 },
-  btnDisabled:{ opacity: 0.4 },
-  btnText:    { fontFamily: Fonts.bold, fontSize: 15 },
-  fieldLabel: { fontFamily: Fonts.semiBold, fontSize: 14, color: Colors.charcoal },
-  notesInput: { borderWidth: 1.5, borderColor: Colors.muted, borderRadius: 10, padding: Spacing.two, fontFamily: Fonts.regular, fontSize: 15, color: Colors.charcoal, textAlignVertical: 'top' },
-  amountInput:{ borderWidth: 1.5, borderColor: Colors.muted, borderRadius: 12, padding: Spacing.two + 2, fontFamily: Fonts.regular, fontSize: 18, color: Colors.charcoal, textAlign: 'center' },
-
-  timelineRow:     { flexDirection: 'row', gap: Spacing.two },
-  timelineTrack:   { width: 20, alignItems: 'center', paddingTop: 3 },
-  timelineDot:     { width: 12, height: 12, borderRadius: 6, flexShrink: 0 },
-  timelineLine:    { width: 2, flex: 1, backgroundColor: Colors.coolGray, marginTop: 4, marginBottom: -4 },
-  timelineContent: { flex: 1 },
-  timelineTop:     { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flexWrap: 'wrap' },
-  timelineAction:  { fontFamily: Fonts.semiBold, fontSize: 14 },
-  timelineAmtBadge:{ borderRadius: 8, paddingHorizontal: 8, paddingVertical: 2 },
-  timelineAmt:     { fontFamily: Fonts.bold, fontSize: 13 },
-  timelineDate:    { fontFamily: Fonts.regular, fontSize: 12, color: Colors.steelGray, marginTop: 3 },
-  timelineUser:    { fontFamily: Fonts.regular, fontSize: 12, color: Colors.iconMuted, marginTop: 1 },
-  timelineNote:    { fontFamily: Fonts.regular, fontSize: 12, color: Colors.charcoal, marginTop: 3, fontStyle: 'italic' },
+  installRow:   { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
+  installDot:   { width: 8, height: 8, borderRadius: 4 },
+  installNum:   { fontFamily: Fonts.bold, fontSize: 12, color: Colors.steelGray, width: 22 },
+  installDate:  { fontFamily: Fonts.regular, fontSize: 13, color: Colors.charcoal },
+  installAmt:   { fontFamily: Fonts.bold, fontSize: 13, color: Colors.charcoal },
+  installPaid:  { fontFamily: Fonts.bold, fontSize: 13, color: Colors.growth },
 });
