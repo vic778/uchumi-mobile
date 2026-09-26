@@ -22,21 +22,24 @@ export default function LoansScreen() {
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.surface }}>
-      <View style={[styles.header, { paddingTop: insets.top + Spacing.three }]}>
+    <View style={{ flex: 1, backgroundColor: Colors.background }}>
+      <View style={[styles.header, { paddingTop: insets.top + 14 }]}>
         <Text style={styles.title}>Mes prêts</Text>
         <TouchableOpacity style={styles.applyBtn} onPress={() => router.push('/(member)/loans/apply' as any)}>
           <Text style={styles.applyLabel}>+ Demander</Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.subHeader}>
+        <Text style={styles.subLabel}>MES PRÊTS</Text>
+      </View>
 
       {loading ? (
-        <ActivityIndicator color={Colors.charcoal} style={{ marginTop: 40 }} />
+        <ActivityIndicator color={Colors.primary} style={{ marginTop: 60 }} />
       ) : (
         <FlatList
           data={loans}
           keyExtractor={(l) => String(l.id)}
-          contentContainerStyle={{ paddingHorizontal: Spacing.four, paddingBottom: 120 }}
+          contentContainerStyle={{ paddingTop: Spacing.three, paddingBottom: 120 }}
           renderItem={({ item }) => (
             <TouchableOpacity style={styles.card} onPress={() => router.push(`/(member)/loans/${item.id}` as any)} activeOpacity={0.8}>
               <View style={styles.cardTop}>
@@ -70,20 +73,22 @@ export default function LoansScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: { paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  title: { fontFamily: Fonts.bold, fontSize: 24, color: Colors.charcoal },
-  applyBtn: { backgroundColor: Colors.charcoal, borderRadius: 20, paddingHorizontal: Spacing.three, paddingVertical: Spacing.one + 2 },
-  applyLabel: { fontFamily: Fonts.semiBold, fontSize: 13, color: Colors.white },
-  card: { backgroundColor: Colors.white, borderRadius: 16, padding: Spacing.three, marginBottom: Spacing.two },
+  header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  subHeader: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three, paddingBottom: Spacing.two, borderBottomWidth: 1, borderBottomColor: Colors.coolGray, backgroundColor: Colors.white, marginBottom: Spacing.three },
+  subLabel: { fontFamily: Fonts.bold, fontSize: 13, color: Colors.primary, letterSpacing: 0.8 },
+  title: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white },
+  applyBtn: { backgroundColor: Colors.green, borderRadius: 20, paddingHorizontal: Spacing.three, paddingVertical: Spacing.one + 2 },
+  applyLabel: { fontFamily: Fonts.semiBold, fontSize: 15, color: Colors.white },
+  card: { backgroundColor: Colors.white, borderRadius: 14, padding: Spacing.three, marginBottom: Spacing.two, marginHorizontal: Spacing.four, borderWidth: 1, borderColor: Colors.coolGray },
   cardTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.one },
-  ref: { fontFamily: Fonts.semiBold, fontSize: 13, color: Colors.steelGray },
+  ref: { fontFamily: Fonts.semiBold, fontSize: 15, color: Colors.steelGray },
   amount: { fontFamily: Fonts.bold, fontSize: 22, color: Colors.charcoal, marginBottom: Spacing.two },
   progressRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: Spacing.one },
-  progressLabel: { fontFamily: Fonts.regular, fontSize: 12, color: Colors.steelGray },
-  progressValue: { fontFamily: Fonts.semiBold, fontSize: 12, color: Colors.charcoal },
+  progressLabel: { fontFamily: Fonts.regular, fontSize: 14, color: Colors.steelGray },
+  progressValue: { fontFamily: Fonts.semiBold, fontSize: 14, color: Colors.charcoal },
   progressBar: { height: 6, backgroundColor: Colors.coolGray, borderRadius: 3 },
-  progressFill: { height: 6, backgroundColor: Colors.green, borderRadius: 3 },
+  progressFill: { height: 6, backgroundColor: Colors.primary, borderRadius: 3 },
   emptyWrap: { alignItems: 'center', paddingTop: 60, gap: Spacing.two },
   emptyTitle: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.charcoal },
-  emptyText: { fontFamily: Fonts.regular, fontSize: 14, color: Colors.steelGray, textAlign: 'center', paddingHorizontal: Spacing.five },
+  emptyText: { fontFamily: Fonts.regular, fontSize: 16, color: Colors.steelGray, textAlign: 'center', paddingHorizontal: Spacing.five },
 });
