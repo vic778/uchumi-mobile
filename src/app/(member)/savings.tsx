@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Dimensions, FlatList, ScrollView, StyleSheet, Text, View, ViewToken } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { Path } from 'react-native-svg';
 import { Colors, Fonts, Spacing } from '@/constants';
-import { getAccounts } from '@/services/member/account';
-import type { Account } from '@/types';
+import { getAccounts, getBlockedAccountTransactions } from '@/services/member/account';
+import type { Account, BlockedAccountTransaction } from '@/types';
 
 const CURRENCY = 'CDF';
 const fmt = (n: number) => n.toLocaleString('fr-CD') + ' ' + CURRENCY;
@@ -15,6 +16,8 @@ export default function AccountsScreen() {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [blockedTxs, setBlockedTxs] = useState<BlockedAccountTransaction[]>([]);
+  const [txLoading, setTxLoading] = useState(false);
 
   useEffect(() => {
     getAccounts().then(setAccounts).catch(() => {}).finally(() => setLoading(false));
@@ -26,6 +29,16 @@ export default function AccountsScreen() {
 
   const viewabilityConfig = useRef({ itemVisiblePercentThreshold: 50 }).current;
   const activeAccount = accounts[activeIndex] ?? null;
+
+  // Fetch blocked account transactions when sliding to a blocked account
+  useEffect(() => {
+    if (activeAccount?.kind !== 'blocked') { setBlockedTxs([]); return; }
+    setTxLoading(true);
+    getBlockedAccountTransactions(activeAccount.id)
+      .then(setBlockedTxs)
+      .catch(() => setBlockedTxs([]))
+      .finally(() => setTxLoading(false));
+  }, [activeAccount?.id, activeAccount?.kind]);
 
   return (
     <View style={styles.root}>
@@ -43,7 +56,7 @@ export default function AccountsScreen() {
             horizontal
             pagingEnabled
             showsHorizontalScrollIndicator={false}
-            keyExtractor={(a) => String(a.id)}
+            keyExtractor={(a) => `${a.kind}_${a.id}`}
             onViewableItemsChanged={onViewableItemsChanged}
             viewabilityConfig={viewabilityConfig}
             style={styles.carousel}
@@ -67,7 +80,7 @@ export default function AccountsScreen() {
             )}
           />
 
-          {/* Pagination dots — only shown when there are multiple accounts */}
+          {/* Pagination dots */}
           {accounts.length > 1 && (
             <View style={styles.dots}>
               {accounts.map((_, i) => (
@@ -76,29 +89,87 @@ export default function AccountsScreen() {
             </View>
           )}
 
-          {/* Savings plan — only for savings accounts */}
-          <ScrollView
-            contentContainerStyle={[styles.scroll, { paddingBottom: Spacing.four }]}
-            showsVerticalScrollIndicator={false}>
-            {activeAccount?.kind === 'blocked' ? null : activeAccount?.savings_plan ? (
-              <>
-                <Text style={styles.sectionLabel}>PLAN D'ÉPARGNE</Text>
+          {/* Content below carousel — differs by account kind */}
+          {activeAccount?.kind === 'blocked' ? (
+            <BlockedHistory txs={blockedTxs} loading={txLoading} />
+          ) : (
+            <ScrollView
+              contentContainerStyle={[styles.scroll, { paddingBottom: Spacing.four }]}
+              showsVerticalScrollIndicator={false}>
+              {activeAccount?.savings_plan ? (
+                <>
+                  <Text style={styles.sectionLabel}>PLAN D'ÉPARGNE</Text>
+                  <View style={styles.card}>
+                    <InfoRow label="Nom du plan" value={activeAccount.savings_plan.name} />
+                    <InfoRow label="Fréquence" value={FREQ[activeAccount.savings_plan.frequency] ?? activeAccount.savings_plan.frequency} />
+                    <InfoRow label="Montant cible" value={fmt(activeAccount.savings_plan.amount)} />
+                    <InfoRow label="Statut" value={activeAccount.savings_plan.active ? 'Actif' : 'Inactif'} last />
+                  </View>
+                </>
+              ) : (
                 <View style={styles.card}>
-                  <InfoRow label="Nom du plan" value={activeAccount.savings_plan.name} />
-                  <InfoRow label="Fréquence" value={FREQ[activeAccount.savings_plan.frequency] ?? activeAccount.savings_plan.frequency} />
-                  <InfoRow label="Montant cible" value={fmt(activeAccount.savings_plan.amount)} />
-                  <InfoRow label="Statut" value={activeAccount.savings_plan.active ? 'Actif' : 'Inactif'} last />
+                  <Text style={styles.emptyText}>
+                    Aucun plan d'épargne actif. Contactez un collecteur pour en créer un.
+                  </Text>
                 </View>
-              </>
-            ) : (
-              <View style={styles.card}>
-                <Text style={styles.emptyText}>
-                  Aucun plan d'épargne actif. Contactez un collecteur pour en créer un.
+              )}
+            </ScrollView>
+          )}
+        </>
+      )}
+    </View>
+  );
+}
+
+function BlockedHistory({ txs, loading }: { txs: BlockedAccountTransaction[]; loading: boolean }) {
+  if (loading) return <ActivityIndicator color={Colors.primary} style={{ marginTop: 40 }} />;
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Text style={[styles.sectionLabel, { marginHorizontal: Spacing.four, marginTop: Spacing.three }]}>
+        HISTORIQUE
+      </Text>
+      {txs.length === 0 ? (
+        <View style={styles.emptyHistoryWrap}>
+          <Svg width={32} height={32} viewBox="0 0 24 24" fill="none">
+            <Path d="M9 5H7C5.9 5 5 5.9 5 7V19C5 20.1 5.9 21 7 21H17C18.1 21 19 20.1 19 19V7C19 5.9 18.1 5 17 5H15M9 5C9 5.55 9.45 6 10 6H14C14.55 6 15 5.55 15 5M9 5C9 4.45 9.45 4 10 4H14C14.55 4 15 4.45 15 5"
+              stroke={Colors.iconMuted} strokeWidth={1.8} strokeLinecap="round" />
+          </Svg>
+          <Text style={styles.emptyHistoryText}>Aucune transaction sur ce compte</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={txs}
+          keyExtractor={(t) => String(t.id)}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: Spacing.four }}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          renderItem={({ item: tx }) => {
+            const isCredit = tx.kind === 'deposit';
+            const date = new Date(tx.created_at).toLocaleDateString('fr-CD', {
+              day: '2-digit', month: 'short', year: 'numeric',
+            });
+            return (
+              <View style={styles.txRow}>
+                <View style={[styles.txIcon, { backgroundColor: isCredit ? '#e8f8e8' : '#fce8e8' }]}>
+                  <Svg width={18} height={18} viewBox="0 0 24 24" fill="none">
+                    {isCredit
+                      ? <Path d="M12 19V5M5 12L12 5L19 12" stroke="#22c55e" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                      : <Path d="M12 5V19M5 12L12 19L19 12" stroke="#ef4444" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                    }
+                  </Svg>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.txTitle}>{isCredit ? 'Virement entrant' : 'Virement sortant'}</Text>
+                  <Text style={styles.txDate}>{date}</Text>
+                </View>
+                <Text style={[styles.txAmount, { color: isCredit ? Colors.growth : Colors.danger }]}>
+                  {isCredit ? '+' : '-'} {tx.amount.toLocaleString('fr-CD')} CDF
                 </Text>
               </View>
-            )}
-          </ScrollView>
-        </>
+            );
+          }}
+        />
       )}
     </View>
   );
@@ -148,4 +219,14 @@ const styles = StyleSheet.create({
   infoLabel: { fontFamily: Fonts.regular, fontSize: 16, color: Colors.steelGray },
   infoValue: { fontFamily: Fonts.semiBold, fontSize: 16, color: Colors.charcoal },
   emptyText: { fontFamily: Fonts.regular, fontSize: 16, color: Colors.steelGray, textAlign: 'center', padding: Spacing.four },
+
+  separator: { height: 1, backgroundColor: Colors.coolGray, marginLeft: Spacing.four + 36 + Spacing.three },
+  txRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, paddingHorizontal: Spacing.four, paddingVertical: Spacing.three, backgroundColor: Colors.white },
+  txIcon: { width: 36, height: 36, borderRadius: 10, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  txTitle: { fontFamily: Fonts.bold, fontSize: 14, color: Colors.charcoal },
+  txDate: { fontFamily: Fonts.regular, fontSize: 12, color: Colors.steelGray, marginTop: 2 },
+  txAmount: { fontFamily: Fonts.bold, fontSize: 14 },
+
+  emptyHistoryWrap: { alignItems: 'center', paddingTop: 40, gap: Spacing.two },
+  emptyHistoryText: { fontFamily: Fonts.regular, fontSize: 15, color: Colors.steelGray },
 });
