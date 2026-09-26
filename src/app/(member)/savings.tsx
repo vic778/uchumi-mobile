@@ -9,6 +9,7 @@ import type { Account } from '@/types';
 const CURRENCY = 'CDF';
 const fmt = (n: number) => n.toLocaleString('fr-CD') + ' ' + CURRENCY;
 const FREQ: Record<string, string> = { daily: 'Quotidien', weekly: 'Hebdomadaire', monthly: 'Mensuel' };
+const TAB_BAR_H = 70;
 
 export default function SavingsScreen() {
   const insets = useSafeAreaInsets();
@@ -20,44 +21,60 @@ export default function SavingsScreen() {
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.surface }}>
-      <View style={[styles.header, { paddingTop: insets.top + Spacing.three }]}>
-        <Text style={styles.title}>Mon épargne</Text>
+    <View style={styles.root}>
+      <View style={[styles.header, { paddingTop: insets.top + 14 }]}>
+        <Text style={styles.headerTitle}>Mon épargne</Text>
+      </View>
+
+      <View style={styles.subHeader}>
+        <Text style={styles.subLabel}>COMPTE ÉPARGNE</Text>
       </View>
 
       {loading ? (
-        <ActivityIndicator color={Colors.charcoal} style={{ marginTop: 40 }} />
+        <ActivityIndicator color={Colors.primary} style={{ marginTop: 60 }} />
       ) : (
-        <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-          <View style={styles.balanceCard}>
-            <Text style={styles.balanceLabel}>Solde disponible</Text>
-            <Text style={styles.balance}>{fmt(account?.balance ?? 0)}</Text>
-            <Text style={styles.since}>Membre depuis {account?.member_since ? new Date(account.member_since).toLocaleDateString('fr-CD', { month: 'long', year: 'numeric' }) : '—'}</Text>
+        <ScrollView
+          contentContainerStyle={[styles.scroll, { paddingBottom: TAB_BAR_H + insets.bottom + Spacing.four }]}
+          showsVerticalScrollIndicator={false}>
+
+          <View style={styles.accountCard}>
+            <View>
+              <Text style={styles.accountTitle}>Solde disponible</Text>
+              {account?.member_since && (
+                <Text style={styles.accountSub}>
+                  Membre depuis {new Date(account.member_since).toLocaleDateString('fr-CD', { month: 'long', year: 'numeric' })}
+                </Text>
+              )}
+            </View>
+            <Text style={styles.balanceAmount}>{fmt(account?.balance ?? 0)}</Text>
           </View>
 
           {account?.savings_plan ? (
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>Plan actif</Text>
-              <InfoRow label="Nom" value={account.savings_plan.name} />
-              <InfoRow label="Fréquence" value={FREQ[account.savings_plan.frequency] ?? account.savings_plan.frequency} />
-              <InfoRow label="Montant" value={fmt(account.savings_plan.amount)} />
-              <InfoRow label="Statut" value={account.savings_plan.status} />
-            </View>
+            <>
+              <Text style={styles.sectionLabel}>MON PLAN D'ÉPARGNE</Text>
+              <View style={styles.card}>
+                <InfoRow label="Nom du plan" value={account.savings_plan.name} />
+                <InfoRow label="Fréquence" value={FREQ[account.savings_plan.frequency] ?? account.savings_plan.frequency} />
+                <InfoRow label="Montant cible" value={fmt(account.savings_plan.amount)} />
+                <InfoRow label="Statut" value={account.savings_plan.active ? 'Actif' : 'Inactif'} last />
+              </View>
+            </>
           ) : (
             <View style={styles.card}>
-              <Text style={styles.emptyText}>Aucun plan d'épargne actif. Contactez un collecteur pour en ouvrir un.</Text>
+              <Text style={styles.emptyText}>Aucun plan d'épargne actif. Contactez un collecteur pour en créer un.</Text>
             </View>
           )}
         </ScrollView>
       )}
+
       <MemberTabBar active="savings" />
     </View>
   );
 }
 
-function InfoRow({ label, value }: { label: string; value: string }) {
+function InfoRow({ label, value, last = false }: { label: string; value: string; last?: boolean }) {
   return (
-    <View style={styles.infoRow}>
+    <View style={[styles.infoRow, !last && styles.infoRowBorder]}>
       <Text style={styles.infoLabel}>{label}</Text>
       <Text style={styles.infoValue}>{value}</Text>
     </View>
@@ -65,17 +82,21 @@ function InfoRow({ label, value }: { label: string; value: string }) {
 }
 
 const styles = StyleSheet.create({
-  header: { paddingHorizontal: Spacing.four, paddingBottom: Spacing.three },
-  title: { fontFamily: Fonts.bold, fontSize: 24, color: Colors.charcoal },
-  scroll: { paddingHorizontal: Spacing.four, paddingBottom: 120 },
-  balanceCard: { backgroundColor: Colors.charcoal, borderRadius: 20, padding: Spacing.four, marginBottom: Spacing.three },
-  balanceLabel: { fontFamily: Fonts.regular, fontSize: 13, color: 'rgba(255,255,255,0.6)', marginBottom: 4 },
-  balance: { fontFamily: Fonts.bold, fontSize: 36, color: Colors.white, marginBottom: 4 },
-  since: { fontFamily: Fonts.regular, fontSize: 12, color: 'rgba(255,255,255,0.5)' },
-  card: { backgroundColor: Colors.white, borderRadius: 16, padding: Spacing.three, gap: Spacing.two },
-  cardTitle: { fontFamily: Fonts.bold, fontSize: 16, color: Colors.charcoal, marginBottom: Spacing.one },
-  infoRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: Spacing.one, borderBottomWidth: 1, borderBottomColor: Colors.muted },
-  infoLabel: { fontFamily: Fonts.regular, fontSize: 14, color: Colors.steelGray },
-  infoValue: { fontFamily: Fonts.semiBold, fontSize: 14, color: Colors.charcoal },
-  emptyText: { fontFamily: Fonts.regular, fontSize: 14, color: Colors.steelGray, textAlign: 'center', paddingVertical: Spacing.two },
+  root: { flex: 1, backgroundColor: Colors.background },
+  header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three },
+  headerTitle: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white },
+  subHeader: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three, paddingBottom: Spacing.two, borderBottomWidth: 1, borderBottomColor: Colors.coolGray, backgroundColor: Colors.white },
+  subLabel: { fontFamily: Fonts.bold, fontSize: 13, color: Colors.primary, letterSpacing: 0.8 },
+  scroll: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three },
+  accountCard: { backgroundColor: Colors.cardBlue, borderRadius: 16, padding: Spacing.four, marginBottom: Spacing.four, gap: Spacing.three, elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.15, shadowRadius: 6 },
+  accountTitle: { fontFamily: Fonts.semiBold, fontSize: 16, color: Colors.white },
+  accountSub: { fontFamily: Fonts.regular, fontSize: 14, color: 'rgba(255,255,255,0.7)', marginTop: 3 },
+  balanceAmount: { fontFamily: Fonts.bold, fontSize: 32, color: Colors.white, letterSpacing: 0.5 },
+  sectionLabel: { fontFamily: Fonts.bold, fontSize: 13, color: Colors.primary, letterSpacing: 0.8, marginBottom: Spacing.two, paddingHorizontal: 2 },
+  card: { backgroundColor: Colors.white, borderRadius: 14, overflow: 'hidden', borderWidth: 1, borderColor: Colors.coolGray },
+  infoRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: Spacing.three, paddingVertical: Spacing.three },
+  infoRowBorder: { borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
+  infoLabel: { fontFamily: Fonts.regular, fontSize: 16, color: Colors.steelGray },
+  infoValue: { fontFamily: Fonts.semiBold, fontSize: 16, color: Colors.charcoal },
+  emptyText: { fontFamily: Fonts.regular, fontSize: 16, color: Colors.steelGray, textAlign: 'center', padding: Spacing.four },
 });
