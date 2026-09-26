@@ -1,10 +1,22 @@
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { Path } from 'react-native-svg';
 import { MemberTabBar } from '@/components/navigation/member-tab-bar';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { logout } from '@/services/auth';
-import { UchumiLogo } from '@/components/ui/uchumi-logo';
+
+const TAB_BAR_H = 70;
+
+type MenuItem = { label: string; icon: string; onPress: () => void; danger?: boolean };
+
+function ChevronRight() {
+  return (
+    <Svg width={16} height={16} viewBox="0 0 24 24" fill="none">
+      <Path d="M9 18L15 12L9 6" stroke={Colors.steelGray} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+    </Svg>
+  );
+}
 
 export default function MemberProfileScreen() {
   const insets = useSafeAreaInsets();
@@ -17,31 +29,60 @@ export default function MemberProfileScreen() {
         text: 'Déconnecter', style: 'destructive', onPress: async () => {
           await logout();
           router.replace('/(auth)/login');
-        }
+        },
       },
     ]);
   };
 
+  const sections: { title?: string; items: MenuItem[] }[] = [
+    {
+      items: [
+        { label: 'Mes documents KYC',   icon: '📄', onPress: () => router.push('/(member)/documents' as any) },
+        { label: 'Mes retraits',         icon: '💸', onPress: () => router.push('/(member)/withdrawals' as any) },
+        { label: 'Mes prêts',            icon: '💳', onPress: () => router.push('/(member)/loans' as any) },
+        { label: 'Notifications',        icon: '🔔', onPress: () => router.push('/(member)/notifications' as any) },
+      ],
+    },
+    {
+      items: [
+        { label: 'Se déconnecter', icon: '🔴', onPress: handleLogout, danger: true },
+      ],
+    },
+  ];
+
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.surface }}>
-      <View style={[styles.header, { paddingTop: insets.top + Spacing.three }]}>
-        <Text style={styles.title}>Profil</Text>
+    <View style={styles.root}>
+      <View style={[styles.header, { paddingTop: insets.top + 14 }]}>
+        <Text style={styles.headerTitle}>Plus de services</Text>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <View style={styles.logoWrap}>
-          <UchumiLogo style={{ width: 90, height: 30 }} />
-        </View>
+      <View style={styles.subHeader}>
+        <Text style={styles.subLabel}>SERVICES</Text>
+      </View>
 
-        <View style={styles.section}>
-          <MenuItem label="📄 Mes documents KYC" onPress={() => router.push('/(member)/documents' as any)} />
-          <MenuItem label="💸 Mes retraits" onPress={() => router.push('/(member)/withdrawals' as any)} />
-          <MenuItem label="🔔 Notifications" onPress={() => router.push('/(member)/notifications' as any)} />
-        </View>
+      <ScrollView
+        contentContainerStyle={[styles.scroll, { paddingBottom: TAB_BAR_H + insets.bottom + Spacing.four }]}
+        showsVerticalScrollIndicator={false}>
 
-        <View style={styles.section}>
-          <MenuItem label="🔴 Se déconnecter" onPress={handleLogout} danger />
-        </View>
+        {sections.map((section, si) => (
+          <View key={si} style={styles.sectionCard}>
+            {section.items.map((item, ii) => (
+              <TouchableOpacity
+                key={ii}
+                style={[styles.menuRow, ii < section.items.length - 1 && styles.menuBorder]}
+                onPress={item.onPress}
+                activeOpacity={0.7}>
+                <View style={styles.menuLeft}>
+                  <View style={styles.menuIconWrap}>
+                    <Text style={styles.menuIcon}>{item.icon}</Text>
+                  </View>
+                  <Text style={[styles.menuLabel, item.danger && { color: Colors.danger }]}>{item.label}</Text>
+                </View>
+                <ChevronRight />
+              </TouchableOpacity>
+            ))}
+          </View>
+        ))}
       </ScrollView>
 
       <MemberTabBar active="profile" />
@@ -49,22 +90,18 @@ export default function MemberProfileScreen() {
   );
 }
 
-function MenuItem({ label, onPress, danger = false }: { label: string; onPress: () => void; danger?: boolean }) {
-  return (
-    <TouchableOpacity style={styles.menuItem} onPress={onPress} activeOpacity={0.7}>
-      <Text style={[styles.menuLabel, danger && { color: Colors.danger }]}>{label}</Text>
-      <Text style={styles.chevron}>›</Text>
-    </TouchableOpacity>
-  );
-}
-
 const styles = StyleSheet.create({
-  header: { paddingHorizontal: Spacing.four, paddingBottom: Spacing.three },
-  title: { fontFamily: Fonts.bold, fontSize: 24, color: Colors.charcoal },
-  scroll: { paddingHorizontal: Spacing.four, paddingBottom: 120 },
-  logoWrap: { alignItems: 'center', paddingVertical: Spacing.four },
-  section: { backgroundColor: Colors.white, borderRadius: 16, marginBottom: Spacing.three, overflow: 'hidden' },
-  menuItem: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: Spacing.three, paddingVertical: Spacing.three, borderBottomWidth: 1, borderBottomColor: Colors.muted },
-  menuLabel: { fontFamily: Fonts.semiBold, fontSize: 15, color: Colors.charcoal },
-  chevron: { fontFamily: Fonts.bold, fontSize: 20, color: Colors.iconMuted },
+  root: { flex: 1, backgroundColor: Colors.background },
+  header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three },
+  headerTitle: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white },
+  subHeader: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three, paddingBottom: Spacing.two, borderBottomWidth: 1, borderBottomColor: Colors.coolGray, backgroundColor: Colors.white },
+  subLabel: { fontFamily: Fonts.bold, fontSize: 13, color: Colors.primary, letterSpacing: 0.8 },
+  scroll: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three },
+  sectionCard: { backgroundColor: Colors.white, borderRadius: 14, overflow: 'hidden', borderWidth: 1, borderColor: Colors.coolGray, marginBottom: Spacing.three },
+  menuRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: Spacing.three, paddingVertical: Spacing.three },
+  menuBorder: { borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
+  menuLeft: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three },
+  menuIconWrap: { width: 38, height: 38, borderRadius: 10, backgroundColor: '#e8f4f8', alignItems: 'center', justifyContent: 'center' },
+  menuIcon: { fontSize: 18 },
+  menuLabel: { fontFamily: Fonts.bold, fontSize: 16, color: Colors.charcoal },
 });
