@@ -76,7 +76,7 @@ function TabBar({ state, navigation }: any) {
               accessibilityRole="button"
               accessibilityLabel={tab.label}
               accessibilityState={{ selected: isActive }}
-              onPress={() => navigation.navigate(tab.name)}
+              onPress={() => navigation.dispatch({ type: 'JUMP_TO', payload: { name: tab.name } })}
               style={({ pressed }) => [styles.tab, pressed && styles.pressed]}>
               <tab.Icon color={color} />
               <Text style={[styles.label, { color }]}>{tab.label}</Text>
