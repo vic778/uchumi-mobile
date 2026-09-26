@@ -3,7 +3,6 @@ import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, TouchableOpac
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import Svg, { Path } from 'react-native-svg';
-import { MemberTabBar } from '@/components/navigation/member-tab-bar';
 import { BackButton } from '@/components/ui/back-button';
 import { TxIcon } from '@/components/ui/tx-icon';
 import { Colors, Fonts, Spacing } from '@/constants';
@@ -12,7 +11,6 @@ import type { Transaction } from '@/types';
 
 const CURRENCY = 'CDF';
 const fmt = (n: number) => n.toLocaleString('fr-CD') + ' ' + CURRENCY;
-const TAB_BAR_H = 70;
 
 const KIND_LABEL: Record<string, string> = {
   deposit:               'Dépôt reçu',
@@ -73,7 +71,7 @@ export default function TransactionsScreen() {
         <FlatList
           data={filtered}
           keyExtractor={t => String(t.id)}
-          contentContainerStyle={{ paddingBottom: TAB_BAR_H + insets.bottom }}
+          contentContainerStyle={{ paddingBottom: Spacing.four }}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           ListEmptyComponent={<Text style={styles.empty}>Aucune transaction trouvée</Text>}
           renderItem={({ item: tx }) => {
@@ -103,7 +101,6 @@ export default function TransactionsScreen() {
         />
       )}
 
-      <MemberTabBar active="transactions" />
     </View>
   );
 }
