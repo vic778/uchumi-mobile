@@ -60,7 +60,7 @@ export default function DocumentUploadScreen() {
     <View style={{ flex: 1, backgroundColor: Colors.background }}>
       <View style={[styles.header, { paddingTop: insets.top + 14 }]}>
         <BackButton onPress={() => router.back()} />
-        <Text style={styles.title}>Ajouter un document</Text>
+        <Text style={styles.title}>Soumettre un document</Text>
         <View style={{ width: 38 }} />
       </View>
 
