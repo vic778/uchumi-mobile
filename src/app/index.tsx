@@ -18,7 +18,8 @@ export default function AuthGate() {
 
     const { role } = state.user;
     if (role === 'member')         router.replace('/(member)/(tabs)/dashboard');
-    else if (role === 'collector') router.replace('/(collector)/dashboard' as any);
+    else if (role === 'collector') router.replace('/(collector)/(tabs)/dashboard' as any);
+    else if (role === 'admin')     router.replace('/(admin)/(tabs)/dashboard' as any);
     else                           router.replace('/(auth)/login');
   }, [state.status]);
 
