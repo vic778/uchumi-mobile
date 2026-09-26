@@ -4,6 +4,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 import { BackButton } from '@/components/ui/back-button';
+import { TxDetailModal, type TxDetailData } from '@/components/ui/tx-detail-modal';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getMember, type CollectorMember, type CollectorTransaction } from '@/services/collector';
 
@@ -30,8 +31,9 @@ export default function CollectorMemberDetailScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { phone } = useLocalSearchParams<{ phone: string }>();
-  const [member, setMember] = useState<CollectorMember | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [member, setMember]     = useState<CollectorMember | null>(null);
+  const [loading, setLoading]   = useState(true);
+  const [selectedTx, setSelectedTx] = useState<TxDetailData | null>(null);
 
   useEffect(() => {
     if (!phone) return;
@@ -56,6 +58,7 @@ export default function CollectorMemberDetailScreen() {
           <Text style={styles.errorText}>Membre introuvable.</Text>
         </View>
       ) : (
+        <>
         <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
           {/* Profile card */}
           <View style={styles.profileCard}>
@@ -86,20 +89,29 @@ export default function CollectorMemberDetailScreen() {
               <Text style={styles.emptyText}>Aucune transaction.</Text>
             ) : (
               member.recent_transactions!.map((txn, i) => (
-                <TxnRow key={txn.id} txn={txn} last={i === member.recent_transactions!.length - 1} />
+                <TxnRow
+                  key={txn.id}
+                  txn={txn}
+                  last={i === member.recent_transactions!.length - 1}
+                  memberName={member.full_name}
+                  onPress={() => setSelectedTx({ ...txn, member: member.full_name, member_phone: member.phone_number })}
+                />
               ))
             )}
           </View>
         </ScrollView>
+
+        <TxDetailModal tx={selectedTx} onClose={() => setSelectedTx(null)} />
+        </>
       )}
     </View>
   );
 }
 
-function TxnRow({ txn, last }: { txn: CollectorTransaction; last: boolean }) {
+function TxnRow({ txn, last, memberName, onPress }: { txn: CollectorTransaction; last: boolean; memberName?: string; onPress: () => void }) {
   const isCredit = txn.kind === 'deposit' || txn.kind === 'loan_credit' || txn.kind === 'transfer_from_blocked';
   return (
-    <View style={[styles.row, !last && styles.rowBorder]}>
+    <TouchableOpacity style={[styles.row, !last && styles.rowBorder]} onPress={onPress} activeOpacity={0.7}>
       <View style={{ flex: 1 }}>
         <Text style={styles.rowKind}>{KIND_LABELS[txn.kind] ?? txn.kind}</Text>
         <Text style={styles.rowRef}>{txn.reference}</Text>
@@ -108,7 +120,7 @@ function TxnRow({ txn, last }: { txn: CollectorTransaction; last: boolean }) {
       <Text style={[styles.rowAmount, { color: isCredit ? Colors.green : Colors.danger }]}>
         {isCredit ? '+' : '-'}{txn.amount.toLocaleString('fr-CD')}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 
