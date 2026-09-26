@@ -1,21 +1,27 @@
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
-import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import { api } from '@/services/api';
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert:  true,
-    shouldShowBanner: true,
-    shouldShowList:   true,
-    shouldPlaySound:  true,
-    shouldSetBadge:   true,
-  }),
-});
+// expo-notifications remote push was removed from Expo Go in SDK 53.
+// Dynamic import + runtime guard prevents the crash in Expo Go.
+const IS_EXPO_GO = Constants.appOwnership === 'expo';
 
 async function registerAndSaveToken() {
-  if (!Device.isDevice) return;
+  if (IS_EXPO_GO || !Device.isDevice) return;
+
+  const Notifications = await import('expo-notifications');
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert:  true,
+      shouldShowBanner: true,
+      shouldShowList:   true,
+      shouldPlaySound:  true,
+      shouldSetBadge:   true,
+    }),
+  });
 
   const { status: current } = await Notifications.getPermissionsAsync();
   const { status } = current === 'granted'
@@ -39,12 +45,8 @@ async function registerAndSaveToken() {
 
 export function usePushNotifications() {
   useEffect(() => {
-    registerAndSaveToken().catch(() => {});
-
-    const sub = Notifications.addNotificationResponseReceivedListener(() => {
-      // Tapping a notification brings the app to foreground automatically
-    });
-
-    return () => sub.remove();
+    if (!IS_EXPO_GO) {
+      registerAndSaveToken().catch(() => {});
+    }
   }, []);
 }
