@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MemberTabBar } from '@/components/navigation/member-tab-bar';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { Colors, Fonts, Routes, Spacing } from '@/constants';
 import { getLoans } from '@/services/member/loans';
@@ -39,7 +38,7 @@ export default function LoansScreen() {
         <FlatList
           data={loans}
           keyExtractor={(l) => String(l.id)}
-          contentContainerStyle={{ paddingTop: Spacing.three, paddingBottom: 120 }}
+          contentContainerStyle={{ paddingTop: Spacing.three, paddingBottom: Spacing.four }}
           renderItem={({ item }) => (
             <TouchableOpacity style={styles.card} onPress={() => router.push(`/(member)/loans/${item.id}` as any)} activeOpacity={0.8}>
               <View style={styles.cardTop}>
@@ -67,7 +66,6 @@ export default function LoansScreen() {
           showsVerticalScrollIndicator={false}
         />
       )}
-      <MemberTabBar active="loans" />
     </View>
   );
 }
