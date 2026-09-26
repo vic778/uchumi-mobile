@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { MemberTabBar } from '@/components/navigation/member-tab-bar';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getNotifications } from '@/services/member/account';
 import type { Notification } from '@/types';
 
 export default function NotificationsScreen() {
   const insets = useSafeAreaInsets();
-  const router = useRouter();
   const [items, setItems] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,47 +16,56 @@ export default function NotificationsScreen() {
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.surface }}>
-      <View style={[styles.header, { paddingTop: insets.top + Spacing.three }]}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Text style={styles.backIcon}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>Notifications</Text>
+    <View style={styles.root}>
+      <View style={[styles.header, { paddingTop: insets.top + 14 }]}>
+        <Text style={styles.headerTitle}>Notifications</Text>
       </View>
 
-      {loading ? <ActivityIndicator color={Colors.charcoal} style={{ marginTop: 40 }} /> : (
+      <View style={styles.subHeader}>
+        <Text style={styles.subLabel}>NOUVELLES NOTIFICATIONS</Text>
+      </View>
+
+      {loading ? <ActivityIndicator color={Colors.primary} style={{ marginTop: 60 }} /> : (
         <FlatList
           data={items}
           keyExtractor={(n) => String(n.id)}
-          contentContainerStyle={{ paddingHorizontal: Spacing.four, paddingBottom: Spacing.six }}
+          contentContainerStyle={{ paddingHorizontal: Spacing.four, paddingTop: Spacing.three, paddingBottom: 80 }}
+          ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: Colors.coolGray }} />}
           renderItem={({ item }) => (
             <View style={[styles.card, !item.read && styles.cardUnread]}>
-              {!item.read && <View style={styles.unreadDot} />}
+              <View style={styles.cardIcon}>
+                <Text style={{ fontFamily: Fonts.bold, fontSize: 16, color: Colors.primary }}>U</Text>
+              </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.notifTitle}>{item.title}</Text>
-                <Text style={styles.notifBody}>{item.body}</Text>
-                <Text style={styles.notifDate}>{new Date(item.created_at).toLocaleDateString('fr-CD', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}</Text>
+                <Text style={styles.notifBody} numberOfLines={3}>{item.body}</Text>
+                <Text style={styles.notifDate}>{new Date(item.created_at).toLocaleDateString('fr-CD', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
               </View>
+              {!item.read && <View style={styles.unreadDot} />}
             </View>
           )}
           ListEmptyComponent={<Text style={styles.empty}>Aucune notification</Text>}
           showsVerticalScrollIndicator={false}
         />
       )}
+
+      <MemberTabBar active="notifications" />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header: { paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
-  backBtn: { padding: Spacing.one },
-  backIcon: { fontSize: 22, color: Colors.charcoal },
-  title: { fontFamily: Fonts.bold, fontSize: 24, color: Colors.charcoal },
-  card: { backgroundColor: Colors.white, borderRadius: 16, padding: Spacing.three, marginBottom: Spacing.two, flexDirection: 'row', gap: Spacing.two },
-  cardUnread: { borderLeftWidth: 3, borderLeftColor: Colors.green },
-  unreadDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.green, marginTop: 5 },
-  notifTitle: { fontFamily: Fonts.bold, fontSize: 14, color: Colors.charcoal, marginBottom: 2 },
-  notifBody: { fontFamily: Fonts.regular, fontSize: 13, color: Colors.steelGray, marginBottom: 4 },
-  notifDate: { fontFamily: Fonts.regular, fontSize: 11, color: Colors.iconMuted },
-  empty: { fontFamily: Fonts.regular, fontSize: 14, color: Colors.steelGray, textAlign: 'center', marginTop: 40 },
+  root: { flex: 1, backgroundColor: Colors.background },
+  header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three },
+  headerTitle: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white },
+  subHeader: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three, paddingBottom: Spacing.two, borderBottomWidth: 1, borderBottomColor: Colors.coolGray, backgroundColor: Colors.white },
+  subLabel: { fontFamily: Fonts.bold, fontSize: 13, color: Colors.primary, letterSpacing: 0.8 },
+  card: { backgroundColor: Colors.white, padding: Spacing.three, flexDirection: 'row', gap: Spacing.three, alignItems: 'flex-start' },
+  cardUnread: {},
+  cardIcon: { width: 42, height: 42, borderRadius: 10, backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.coolGray, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  unreadDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.danger, marginTop: 4, flexShrink: 0 },
+  notifTitle: { fontFamily: Fonts.bold, fontSize: 14, color: Colors.charcoal, marginBottom: 3 },
+  notifBody: { fontFamily: Fonts.regular, fontSize: 13, color: Colors.steelGray, marginBottom: 4, lineHeight: 19 },
+  notifDate: { fontFamily: Fonts.regular, fontSize: 12, color: Colors.iconMuted },
+  empty: { fontFamily: Fonts.regular, fontSize: 16, color: Colors.steelGray, textAlign: 'center', marginTop: 60 },
 });
