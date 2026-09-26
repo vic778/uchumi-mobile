@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
+import { Bell } from 'lucide-react-native';
 import { TxDetailModal, type TxDetailData } from '@/components/ui/tx-detail-modal';
 import { KpiCard, UsersIcon, PiggyIcon, CreditIcon, ClockIcon } from '@/components/admin/kpi-card';
 import { ComboChart, COLOR_DEPOSIT, COLOR_LOAN, COLOR_RATIO } from '@/components/admin/combo-chart';
@@ -22,15 +22,6 @@ const TX_META: Record<string, { label: string; credit: boolean }> = {
   withdrawal:     { label: 'Retrait',       credit: false },
   loan_repayment: { label: 'Remboursement', credit: false },
 };
-
-function BellIcon({ color }: { color: string }) {
-  return (
-    <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-      <Path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
-      <Path d="M13.73 21a2 2 0 0 1-3.46 0" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
-    </Svg>
-  );
-}
 
 export default function AdminDashboardScreen() {
   const insets  = useSafeAreaInsets();
@@ -74,7 +65,7 @@ export default function AdminDashboardScreen() {
           </TouchableOpacity>
         )}
         <TouchableOpacity style={styles.bellBtn} onPress={() => router.push('/(admin)/notifications' as any)} activeOpacity={0.75}>
-          <BellIcon color={Colors.white} />
+          <Bell size={22} color={Colors.white} strokeWidth={1.8} />
         </TouchableOpacity>
       </View>
 

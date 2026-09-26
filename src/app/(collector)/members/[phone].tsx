@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
+import { Plus } from 'lucide-react-native';
 import { BackButton } from '@/components/ui/back-button';
 import { TxDetailModal, type TxDetailData } from '@/components/ui/tx-detail-modal';
 import { Colors, Fonts, Spacing } from '@/constants';
@@ -18,14 +18,6 @@ const KIND_LABELS: Record<string, string> = {
   transfer_to_blocked:  'Transfert épargne bloquée',
   transfer_from_blocked:'Retour épargne bloquée',
 };
-
-function PlusIcon() {
-  return (
-    <Svg width={18} height={18} viewBox="0 0 24 24" fill="none">
-      <Path d="M12 5V19M5 12H19" stroke={Colors.white} strokeWidth={2.2} strokeLinecap="round" />
-    </Svg>
-  );
-}
 
 export default function CollectorMemberDetailScreen() {
   const insets = useSafeAreaInsets();
@@ -78,7 +70,7 @@ export default function CollectorMemberDetailScreen() {
             style={styles.depositBtn}
             onPress={() => router.push('/(collector)/deposits/new' as any)}
             activeOpacity={0.85}>
-            <PlusIcon />
+            <Plus size={18} color={Colors.white} strokeWidth={2.2} />
             <Text style={styles.depositBtnLabel}>Effectuer un dépôt</Text>
           </TouchableOpacity>
 

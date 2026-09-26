@@ -1,65 +1,16 @@
 import { Tabs, router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path, Circle, Rect } from 'react-native-svg';
+import { LayoutDashboard, Users, BadgeCheck, Banknote, Ellipsis } from 'lucide-react-native';
 import { Colors, Fonts } from '@/constants';
 import { usePushNotifications } from '@/hooks/use-push-notifications';
 
-function DashIcon({ color }: { color: string }) {
-  return (
-    <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-      <Rect x={3}  y={3}  width={8} height={8}  rx={2} stroke={color} strokeWidth={1.8} />
-      <Rect x={13} y={3}  width={8} height={8}  rx={2} stroke={color} strokeWidth={1.8} />
-      <Rect x={3}  y={13} width={8} height={8}  rx={2} stroke={color} strokeWidth={1.8} />
-      <Rect x={13} y={13} width={8} height={8}  rx={2} stroke={color} strokeWidth={1.8} />
-    </Svg>
-  );
-}
-
-function MembersIcon({ color }: { color: string }) {
-  return (
-    <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-      <Circle cx={9}  cy={7}  r={4} stroke={color} strokeWidth={1.8} />
-      <Circle cx={17} cy={9}  r={3} stroke={color} strokeWidth={1.8} />
-      <Path d="M2 21v-1a7 7 0 0 1 14 0v1"   stroke={color} strokeWidth={1.8} strokeLinecap="round" />
-      <Path d="M22 21v-1a5 5 0 0 0-5-5"     stroke={color} strokeWidth={1.8} strokeLinecap="round" />
-    </Svg>
-  );
-}
-
-function KycIcon({ color }: { color: string }) {
-  return (
-    <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-      <Path d="M9 11l3 3L22 4" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
-      <Path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke={color} strokeWidth={1.8} strokeLinecap="round" />
-    </Svg>
-  );
-}
-
-function LoansIcon({ color }: { color: string }) {
-  return (
-    <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-      <Path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke={color} strokeWidth={1.8} strokeLinecap="round" />
-    </Svg>
-  );
-}
-
-function MoreIcon({ color }: { color: string }) {
-  return (
-    <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-      <Circle cx={5}  cy={12} r={1.5} fill={color} />
-      <Circle cx={12} cy={12} r={1.5} fill={color} />
-      <Circle cx={19} cy={12} r={1.5} fill={color} />
-    </Svg>
-  );
-}
-
 const TABS = [
-  { name: 'dashboard', label: 'Tableau', Icon: DashIcon,    href: '/(admin)/(tabs)/dashboard' },
-  { name: 'members',   label: 'Membres', Icon: MembersIcon, href: '/(admin)/(tabs)/members' },
-  { name: 'kyc',       label: 'KYC',     Icon: KycIcon,     href: '/(admin)/(tabs)/kyc' },
-  { name: 'loans',     label: 'Prêts',   Icon: LoansIcon,   href: '/(admin)/(tabs)/loans' },
-  { name: 'profile',   label: 'Plus',    Icon: MoreIcon,    href: '/(admin)/(tabs)/profile' },
+  { name: 'dashboard', label: 'Tableau', Icon: LayoutDashboard, href: '/(admin)/(tabs)/dashboard' },
+  { name: 'members',   label: 'Membres', Icon: Users,           href: '/(admin)/(tabs)/members' },
+  { name: 'kyc',       label: 'KYC',     Icon: BadgeCheck,      href: '/(admin)/(tabs)/kyc' },
+  { name: 'loans',     label: 'Prêts',   Icon: Banknote,        href: '/(admin)/(tabs)/loans' },
+  { name: 'profile',   label: 'Plus',    Icon: Ellipsis,        href: '/(admin)/(tabs)/profile' },
 ];
 
 function AdminTabBar({ state }: any) {
@@ -80,7 +31,7 @@ function AdminTabBar({ state }: any) {
               accessibilityState={{ selected: isActive }}
               onPress={() => { if (!isActive) router.navigate(tab.href as any); }}
               style={({ pressed }) => [styles.tab, pressed && styles.pressed]}>
-              <tab.Icon color={color} />
+              <tab.Icon size={22} color={color} strokeWidth={1.8} />
               <Text style={[styles.label, { color }]}>{tab.label}</Text>
             </Pressable>
           );
@@ -109,14 +60,7 @@ export default function AdminTabsLayout() {
 }
 
 const styles = StyleSheet.create({
-  bar: {
-    backgroundColor: Colors.white,
-    borderTopWidth: 1,
-    borderTopColor: '#e5e7eb',
-    flexDirection: 'row',
-    paddingTop: 8,
-    paddingBottom: 6,
-  },
+  bar:     { backgroundColor: Colors.white, borderTopWidth: 1, borderTopColor: '#e5e7eb', flexDirection: 'row', paddingTop: 8, paddingBottom: 6 },
   tab:     { flex: 1, alignItems: 'center', gap: 3, paddingVertical: 4 },
   label:   { fontFamily: Fonts.medium, fontSize: 12, lineHeight: 13 },
   pressed: { opacity: 0.6 },

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, RefreshControl, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
+import { Search } from 'lucide-react-native';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getLoans, type AdminLoanSummary } from '@/services/admin';
 import { LoanCard } from '@/components/admin/loan-card';
@@ -21,15 +21,6 @@ const STATUSES = [
   { value: 'repaid',        label: 'Remboursé'  },
   { value: 'rejected',      label: 'Rejeté'     },
 ];
-
-function SearchIcon() {
-  return (
-    <Svg width={15} height={15} viewBox="0 0 24 24" fill="none">
-      <Path d="M21 21L16.65 16.65M19 11C19 15.42 15.42 19 11 19C6.58 19 3 15.42 3 11C3 6.58 6.58 3 11 3C15.42 3 19 6.58 19 11Z"
-        stroke={Colors.iconMuted} strokeWidth={2} strokeLinecap="round" />
-    </Svg>
-  );
-}
 
 export default function AdminLoansScreen() {
   const insets = useSafeAreaInsets();
@@ -68,7 +59,7 @@ export default function AdminLoansScreen() {
   const ListHeader = (
     <>
       <View style={styles.searchWrap}>
-        <SearchIcon />
+        <Search size={15} color={Colors.iconMuted} strokeWidth={2} />
         <TextInput
           style={styles.searchInput}
           placeholder="Rechercher par nom ou référence..."

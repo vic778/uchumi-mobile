@@ -1,27 +1,19 @@
 import { Alert, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
+import { ChevronRight, Receipt, Banknote, BarChart3, PiggyBank, Lock, LogOut } from 'lucide-react-native';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { logout } from '@/services/auth';
 import { useAppLock } from '@/context/app-lock-context';
 
 type MenuItem = {
   label: string;
-  icon: string;
+  icon: React.ReactNode;
   onPress?: () => void;
   danger?: boolean;
   switchValue?: boolean;
   onSwitchChange?: (v: boolean) => void;
 };
-
-function ChevronRight() {
-  return (
-    <Svg width={16} height={16} viewBox="0 0 24 24" fill="none">
-      <Path d="M9 18L15 12L9 6" stroke={Colors.steelGray} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-    </Svg>
-  );
-}
 
 export default function AdminProfileScreen() {
   const insets = useSafeAreaInsets();
@@ -44,10 +36,10 @@ export default function AdminProfileScreen() {
     {
       title: 'Gestion',
       items: [
-        { label: 'Transactions',     icon: '💳', onPress: () => router.push('/(admin)/transactions' as any) },
-        { label: 'Retraits',         icon: '💸', onPress: () => router.push('/(admin)/withdrawals' as any) },
-        { label: "Plans d'épargne",  icon: '📊', onPress: () => router.push('/(admin)/savings-plans' as any) },
-        { label: 'Dépôt manuel',     icon: '💰', onPress: () => router.push('/(admin)/deposits/new' as any) },
+        { label: 'Transactions',     icon: <Receipt   size={20} color={Colors.primary} strokeWidth={1.8} />, onPress: () => router.push('/(admin)/transactions' as any) },
+        { label: 'Retraits',         icon: <Banknote  size={20} color={Colors.primary} strokeWidth={1.8} />, onPress: () => router.push('/(admin)/withdrawals' as any) },
+        { label: "Plans d'épargne",  icon: <BarChart3 size={20} color={Colors.primary} strokeWidth={1.8} />, onPress: () => router.push('/(admin)/savings-plans' as any) },
+        { label: 'Dépôt manuel',     icon: <PiggyBank size={20} color={Colors.primary} strokeWidth={1.8} />, onPress: () => router.push('/(admin)/deposits/new' as any) },
       ],
     },
     {
@@ -55,7 +47,7 @@ export default function AdminProfileScreen() {
       items: [
         {
           label: 'Verrouillage biométrique',
-          icon: '🔐',
+          icon: <Lock size={20} color={Colors.primary} strokeWidth={1.8} />,
           switchValue: lockEnabled,
           onSwitchChange: toggleLock,
         },
@@ -64,7 +56,7 @@ export default function AdminProfileScreen() {
     {
       title: 'Compte',
       items: [
-        { label: 'Se déconnecter', icon: '🔴', onPress: handleLogout, danger: true },
+        { label: 'Se déconnecter', icon: <LogOut size={20} color={Colors.danger} strokeWidth={1.8} />, onPress: handleLogout, danger: true },
       ],
     },
   ];
@@ -93,13 +85,13 @@ export default function AdminProfileScreen() {
                   disabled={item.switchValue !== undefined}>
                   <View style={styles.menuLeft}>
                     <View style={styles.menuIconWrap}>
-                      <Text style={styles.menuIcon}>{item.icon}</Text>
+                      {item.icon}
                     </View>
                     <Text style={[styles.menuLabel, item.danger && { color: Colors.danger }]}>{item.label}</Text>
                   </View>
                   {item.switchValue !== undefined
                     ? <Switch value={item.switchValue} onValueChange={item.onSwitchChange} trackColor={{ true: Colors.primary }} thumbColor={Colors.white} />
-                    : <ChevronRight />}
+                    : <ChevronRight size={16} color={Colors.steelGray} strokeWidth={2} />}
                 </TouchableOpacity>
               ))}
             </View>
@@ -122,6 +114,5 @@ const styles = StyleSheet.create({
   menuBorder:   { borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
   menuLeft:     { flexDirection: 'row', alignItems: 'center', gap: Spacing.three },
   menuIconWrap: { width: 38, height: 38, borderRadius: 10, backgroundColor: Colors.primary + '12', alignItems: 'center', justifyContent: 'center' },
-  menuIcon:     { fontSize: 18 },
   menuLabel:    { fontFamily: Fonts.bold, fontSize: 16, color: Colors.charcoal },
 });

@@ -2,22 +2,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
+import { Search } from 'lucide-react-native';
 import { BackButton } from '@/components/ui/back-button';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getMembers, type CollectorMember } from '@/services/collector';
 
 const CURRENCY = 'CDF';
 const fmt = (n: number) => n.toLocaleString('fr-CD') + ' ' + CURRENCY;
-
-function SearchIcon() {
-  return (
-    <Svg width={16} height={16} viewBox="0 0 24 24" fill="none">
-      <Path d="M21 21L16.65 16.65M19 11C19 15.42 15.42 19 11 19C6.58 19 3 15.42 3 11C3 6.58 6.58 3 11 3C15.42 3 19 6.58 19 11Z"
-        stroke={Colors.steelGray} strokeWidth={2} strokeLinecap="round" />
-    </Svg>
-  );
-}
 
 export default function CollectorMembersScreen() {
   const insets = useSafeAreaInsets();
@@ -55,7 +46,7 @@ export default function CollectorMembersScreen() {
       </View>
 
       <View style={styles.searchWrap}>
-        <SearchIcon />
+        <Search size={16} color={Colors.steelGray} strokeWidth={2} />
         <TextInput
           style={styles.searchInput}
           placeholder="Rechercher par nom ou numéro..."

@@ -2,21 +2,13 @@ import { useRef, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
+import { Check } from 'lucide-react-native';
 import { BackButton } from '@/components/ui/back-button';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { lookupMember, createDeposit, type CollectorMember } from '@/services/collector';
 
 const CURRENCY = 'CDF';
 const fmt = (n: number) => n.toLocaleString('fr-CD') + ' ' + CURRENCY;
-
-function CheckIcon() {
-  return (
-    <Svg width={18} height={18} viewBox="0 0 24 24" fill="none">
-      <Path d="M20 6L9 17L4 12" stroke={Colors.white} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-    </Svg>
-  );
-}
 
 export default function NewDepositScreen() {
   const insets = useSafeAreaInsets();
@@ -113,7 +105,7 @@ export default function NewDepositScreen() {
                   <Text style={styles.memberPhone}>{member!.phone_number}</Text>
                 </View>
                 <View style={styles.checkBadge}>
-                  <CheckIcon />
+                  <Check size={18} color={Colors.white} strokeWidth={2.5} />
                 </View>
               </View>
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import Svg, { Path } from 'react-native-svg';
+import { Bell } from 'lucide-react-native';
 import { TxIcon } from '@/components/ui/tx-icon';
 import { Colors, Fonts, Routes, Spacing } from '@/constants';
 import { getAccount, getTransactions } from '@/services/member/account';
@@ -47,12 +47,7 @@ export default function MemberDashboard() {
             <Text style={styles.headerName} numberOfLines={1}>{userName || 'Membre'}</Text>
           </View>
           <TouchableOpacity onPress={() => router.push(Routes.memberNotifications as any)} style={styles.bellBtn}>
-            <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-              <Path d="M18 8A6 6 0 0 0 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z"
-                stroke="#fff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
-              <Path d="M13.73 21C13.55 21.3 13.28 21.55 12.96 21.72C12.65 21.89 12.33 21.97 12 21.97C11.67 21.97 11.35 21.89 11.04 21.72C10.72 21.55 10.45 21.3 10.27 21"
-                stroke="#fff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
-            </Svg>
+            <Bell size={22} color="#fff" strokeWidth={1.8} />
           </TouchableOpacity>
         </View>
       </View>

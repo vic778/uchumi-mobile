@@ -1,27 +1,19 @@
 import { Alert, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
+import { ChevronRight, FileText, Banknote, CreditCard, Bell, Lock, Info, ScrollText, ShieldCheck, LogOut } from 'lucide-react-native';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { logout } from '@/services/auth';
 import { useAppLock } from '@/context/app-lock-context';
 
 type MenuItem = {
   label: string;
-  icon: string;
+  icon: React.ReactNode;
   onPress?: () => void;
   danger?: boolean;
   switchValue?: boolean;
   onSwitchChange?: (v: boolean) => void;
 };
-
-function ChevronRight() {
-  return (
-    <Svg width={16} height={16} viewBox="0 0 24 24" fill="none">
-      <Path d="M9 18L15 12L9 6" stroke={Colors.steelGray} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-    </Svg>
-  );
-}
 
 export default function MemberProfileScreen() {
   const insets = useSafeAreaInsets();
@@ -40,13 +32,15 @@ export default function MemberProfileScreen() {
     ]);
   };
 
+  const ic = { size: 20, color: Colors.primary, strokeWidth: 1.8 } as const;
+
   const sections: { title?: string; items: MenuItem[] }[] = [
     {
       items: [
-        { label: 'Mes documents KYC',   icon: '📄', onPress: () => router.push('/(member)/documents' as any) },
-        { label: 'Mes retraits',         icon: '💸', onPress: () => router.push('/(member)/withdrawals' as any) },
-        { label: 'Mes prêts',            icon: '💳', onPress: () => router.push('/(member)/loans' as any) },
-        { label: 'Notifications',        icon: '🔔', onPress: () => router.push('/(member)/notifications' as any) },
+        { label: 'Mes documents KYC',   icon: <FileText   {...ic} />, onPress: () => router.push('/(member)/documents' as any) },
+        { label: 'Mes retraits',         icon: <Banknote   {...ic} />, onPress: () => router.push('/(member)/withdrawals' as any) },
+        { label: 'Mes prêts',            icon: <CreditCard {...ic} />, onPress: () => router.push('/(member)/loans' as any) },
+        { label: 'Notifications',        icon: <Bell       {...ic} />, onPress: () => router.push('/(member)/notifications' as any) },
       ],
     },
     {
@@ -54,7 +48,7 @@ export default function MemberProfileScreen() {
       items: [
         {
           label: 'Verrouillage biométrique',
-          icon: '🔐',
+          icon: <Lock {...ic} />,
           switchValue: lockEnabled,
           onSwitchChange: toggleLock,
         },
@@ -63,14 +57,14 @@ export default function MemberProfileScreen() {
     {
       title: 'Informations',
       items: [
-        { label: 'À propos de nous',             icon: 'ℹ️',  onPress: () => router.push('/(member)/about' as any) },
-        { label: "Conditions d'utilisation",      icon: '📜', onPress: () => router.push('/(member)/terms' as any) },
-        { label: 'Politique de confidentialité', icon: '🔒', onPress: () => router.push('/(member)/privacy' as any) },
+        { label: 'À propos de nous',             icon: <Info        {...ic} />, onPress: () => router.push('/(member)/about' as any) },
+        { label: "Conditions d'utilisation",      icon: <ScrollText  {...ic} />, onPress: () => router.push('/(member)/terms' as any) },
+        { label: 'Politique de confidentialité', icon: <ShieldCheck {...ic} />, onPress: () => router.push('/(member)/privacy' as any) },
       ],
     },
     {
       items: [
-        { label: 'Se déconnecter', icon: '🔴', onPress: handleLogout, danger: true },
+        { label: 'Se déconnecter', icon: <LogOut size={20} color={Colors.danger} strokeWidth={1.8} />, onPress: handleLogout, danger: true },
       ],
     },
   ];
@@ -88,30 +82,29 @@ export default function MemberProfileScreen() {
         {sections.map((section, si) => (
           <View key={si}>
             {section.title && <Text style={styles.sectionTitle}>{section.title.toUpperCase()}</Text>}
-          <View style={styles.sectionCard}>
-            {section.items.map((item, ii) => (
-              <TouchableOpacity
-                key={ii}
-                style={[styles.menuRow, ii < section.items.length - 1 && styles.menuBorder]}
-                onPress={item.switchValue !== undefined ? undefined : item.onPress}
-                activeOpacity={item.switchValue !== undefined ? 1 : 0.7}
-                disabled={item.switchValue !== undefined}>
-                <View style={styles.menuLeft}>
-                  <View style={styles.menuIconWrap}>
-                    <Text style={styles.menuIcon}>{item.icon}</Text>
+            <View style={styles.sectionCard}>
+              {section.items.map((item, ii) => (
+                <TouchableOpacity
+                  key={ii}
+                  style={[styles.menuRow, ii < section.items.length - 1 && styles.menuBorder]}
+                  onPress={item.switchValue !== undefined ? undefined : item.onPress}
+                  activeOpacity={item.switchValue !== undefined ? 1 : 0.7}
+                  disabled={item.switchValue !== undefined}>
+                  <View style={styles.menuLeft}>
+                    <View style={styles.menuIconWrap}>
+                      {item.icon}
+                    </View>
+                    <Text style={[styles.menuLabel, item.danger && { color: Colors.danger }]}>{item.label}</Text>
                   </View>
-                  <Text style={[styles.menuLabel, item.danger && { color: Colors.danger }]}>{item.label}</Text>
-                </View>
-                {item.switchValue !== undefined
-                  ? <Switch value={item.switchValue} onValueChange={item.onSwitchChange} trackColor={{ true: Colors.primary }} thumbColor={Colors.white} />
-                  : <ChevronRight />}
-              </TouchableOpacity>
-            ))}
-          </View>
+                  {item.switchValue !== undefined
+                    ? <Switch value={item.switchValue} onValueChange={item.onSwitchChange} trackColor={{ true: Colors.primary }} thumbColor={Colors.white} />
+                    : <ChevronRight size={16} color={Colors.steelGray} strokeWidth={2} />}
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         ))}
       </ScrollView>
-
     </View>
   );
 }
@@ -127,6 +120,5 @@ const styles = StyleSheet.create({
   menuBorder: { borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
   menuLeft: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three },
   menuIconWrap: { width: 38, height: 38, borderRadius: 10, backgroundColor: '#e8f4f8', alignItems: 'center', justifyContent: 'center' },
-  menuIcon: { fontSize: 18 },
   menuLabel: { fontFamily: Fonts.bold, fontSize: 16, color: Colors.charcoal },
 });
