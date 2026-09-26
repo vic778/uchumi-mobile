@@ -24,10 +24,6 @@ export default function SavingsScreen() {
         <Text style={styles.headerTitle}>Mon épargne</Text>
       </View>
 
-      <View style={styles.subHeader}>
-        <Text style={styles.subLabel}>COMPTE ÉPARGNE</Text>
-      </View>
-
       {loading ? (
         <ActivityIndicator color={Colors.primary} style={{ marginTop: 60 }} />
       ) : (
@@ -82,8 +78,6 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.background },
   header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three },
   headerTitle: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white },
-  subHeader: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three, paddingBottom: Spacing.two, borderBottomWidth: 1, borderBottomColor: Colors.coolGray, backgroundColor: Colors.white },
-  subLabel: { fontFamily: Fonts.bold, fontSize: 13, color: Colors.primary, letterSpacing: 0.8 },
   scroll: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three },
   accountCard: { backgroundColor: Colors.cardBlue, borderRadius: 16, padding: Spacing.four, marginBottom: Spacing.four, gap: Spacing.three, elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.15, shadowRadius: 6 },
   accountTitle: { fontFamily: Fonts.semiBold, fontSize: 16, color: Colors.white },
