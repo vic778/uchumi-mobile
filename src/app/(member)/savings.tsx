@@ -49,14 +49,16 @@ export default function AccountsScreen() {
             style={styles.carousel}
             renderItem={({ item }) => (
               <View style={styles.cardWrap}>
-                <View style={styles.accountCard}>
+                <View style={[styles.accountCard, item.kind === 'blocked' && styles.accountCardBlocked]}>
                   <View>
                     <Text style={styles.accountTitle}>{item.name ?? 'Compte principal'}</Text>
-                    {item.member_since && (
+                    {item.member_since ? (
                       <Text style={styles.accountSub}>
                         Membre depuis{' '}
                         {new Date(item.member_since).toLocaleDateString('fr-CD', { month: 'long', year: 'numeric' })}
                       </Text>
+                    ) : (
+                      <Text style={styles.accountSub}>Compte bloqué · épargne verrouillée</Text>
                     )}
                   </View>
                   <Text style={styles.balanceAmount}>{fmt(item.balance)}</Text>
@@ -74,11 +76,11 @@ export default function AccountsScreen() {
             </View>
           )}
 
-          {/* Savings plan for active account */}
+          {/* Savings plan — only for savings accounts */}
           <ScrollView
             contentContainerStyle={[styles.scroll, { paddingBottom: Spacing.four }]}
             showsVerticalScrollIndicator={false}>
-            {activeAccount?.savings_plan ? (
+            {activeAccount?.kind === 'blocked' ? null : activeAccount?.savings_plan ? (
               <>
                 <Text style={styles.sectionLabel}>PLAN D'ÉPARGNE</Text>
                 <View style={styles.card}>
@@ -129,6 +131,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 6,
   },
+  accountCardBlocked: { backgroundColor: '#1a5276' },
   accountTitle: { fontFamily: Fonts.semiBold, fontSize: 16, color: Colors.white },
   accountSub: { fontFamily: Fonts.regular, fontSize: 14, color: 'rgba(255,255,255,0.7)', marginTop: 3 },
   balanceAmount: { fontFamily: Fonts.bold, fontSize: 32, color: Colors.white, letterSpacing: 0.5 },
