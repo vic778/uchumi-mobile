@@ -24,9 +24,11 @@ export default function LoansScreen() {
     <View style={{ flex: 1, backgroundColor: Colors.background }}>
       <View style={[styles.header, { paddingTop: insets.top + 14 }]}>
         <Text style={styles.title}>Mes prêts</Text>
-        <TouchableOpacity style={styles.applyBtn} onPress={() => router.push('/(member)/loans/apply' as any)}>
-          <Text style={styles.applyLabel}>+ Demander</Text>
-        </TouchableOpacity>
+        {!loading && loans.length === 0 && (
+          <TouchableOpacity style={styles.applyBtn} onPress={() => router.push('/(member)/loans/apply' as any)}>
+            <Text style={styles.applyLabel}>+ Demander</Text>
+          </TouchableOpacity>
+        )}
       </View>
       {loading ? (
         <ActivityIndicator color={Colors.primary} style={{ marginTop: 60 }} />
