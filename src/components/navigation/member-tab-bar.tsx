@@ -62,7 +62,7 @@ const TABS: { id: MemberTab; label: string; route: string; Icon: React.FC<{ colo
   { id: 'profile',       label: 'Plus',       route: Routes.memberProfile,       Icon: MoreIcon },
 ];
 
-export function MemberTabBar({ active }: { active: MemberTab }) {
+export function MemberTabBar({ active }: { active: MemberTab | string }) {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
