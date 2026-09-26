@@ -58,12 +58,22 @@ export type AdminLoanSummary = {
   member: { full_name: string; phone_number: string; initials: string };
 };
 
+export type LoanLog = {
+  id: number;
+  action: string;
+  action_label: string;
+  notes?: string;
+  user_name?: string;
+  created_at: string;
+};
+
 export type AdminLoanDetail = AdminLoanSummary & {
   notes?: string;
   offer_notes?: string;
   disbursed_amount?: number;
   outstanding_amount: number;
   installments: { id: number; amount: number; due_date?: string; paid: boolean; paid_at?: string }[];
+  logs: LoanLog[];
 };
 
 export type AdminWithdrawal = {
