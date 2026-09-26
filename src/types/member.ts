@@ -7,12 +7,19 @@ export type SavingsPlan = {
 };
 
 export type Account = {
-  id: number | string;
+  id: number;
   kind?: 'savings' | 'blocked';
   name?: string;
   balance: number;
   savings_plan: SavingsPlan | null;
   member_since: string | null;
+};
+
+export type BlockedAccountTransaction = {
+  id: number;
+  kind: 'deposit' | 'withdrawal';
+  amount: number;
+  created_at: string;
 };
 
 export type Transaction = {
