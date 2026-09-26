@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MemberTabBar } from '@/components/navigation/member-tab-bar';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getWithdrawals } from '@/services/member/withdrawals';
@@ -33,7 +32,7 @@ export default function WithdrawalsScreen() {
         <FlatList
           data={items}
           keyExtractor={(w) => String(w.id)}
-          contentContainerStyle={{ paddingHorizontal: Spacing.four, paddingBottom: 120 }}
+          contentContainerStyle={{ paddingHorizontal: Spacing.four, paddingBottom: Spacing.four }}
           renderItem={({ item }) => (
             <View style={styles.card}>
               <View style={styles.cardRow}>
@@ -47,7 +46,6 @@ export default function WithdrawalsScreen() {
           showsVerticalScrollIndicator={false}
         />
       )}
-      <MemberTabBar active="dashboard" />
     </View>
   );
 }
