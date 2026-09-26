@@ -93,9 +93,9 @@ const styles = StyleSheet.create({
   durationRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
   durationChip: { paddingHorizontal: Spacing.three, paddingVertical: Spacing.one + 2, borderRadius: 20, borderWidth: 1.5, borderColor: Colors.muted },
   durationActive: { backgroundColor: Colors.charcoal, borderColor: Colors.charcoal },
-  durationLabel: { fontFamily: Fonts.semiBold, fontSize: 13, color: Colors.steelGray },
+  durationLabel: { fontFamily: Fonts.semiBold, fontSize: 15, color: Colors.steelGray },
   durationLabelActive: { color: Colors.white },
   noteCard: { backgroundColor: Colors.coolGray, borderRadius: 12, padding: Spacing.three, gap: Spacing.one },
-  noteTitle: { fontFamily: Fonts.bold, fontSize: 14, color: Colors.charcoal, marginBottom: Spacing.one },
-  noteText: { fontFamily: Fonts.regular, fontSize: 13, color: Colors.steelGray },
+  noteTitle: { fontFamily: Fonts.bold, fontSize: 16, color: Colors.charcoal, marginBottom: Spacing.one },
+  noteText: { fontFamily: Fonts.regular, fontSize: 15, color: Colors.steelGray },
 });
