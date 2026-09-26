@@ -54,10 +54,6 @@ export default function MemberProfileScreen() {
         <Text style={styles.headerTitle}>Plus de services</Text>
       </View>
 
-      <View style={styles.subHeader}>
-        <Text style={styles.subLabel}>SERVICES</Text>
-      </View>
-
       <ScrollView
         contentContainerStyle={[styles.scroll, { paddingBottom: Spacing.four }]}
         showsVerticalScrollIndicator={false}>
@@ -91,8 +87,6 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.background },
   header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three },
   headerTitle: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white },
-  subHeader: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three, paddingBottom: Spacing.two, borderBottomWidth: 1, borderBottomColor: Colors.coolGray, backgroundColor: Colors.white },
-  subLabel: { fontFamily: Fonts.bold, fontSize: 13, color: Colors.primary, letterSpacing: 0.8 },
   scroll: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three },
   sectionCard: { backgroundColor: Colors.white, borderRadius: 14, overflow: 'hidden', borderWidth: 1, borderColor: Colors.coolGray, marginBottom: Spacing.three },
   menuRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: Spacing.three, paddingVertical: Spacing.three },
