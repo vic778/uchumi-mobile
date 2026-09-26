@@ -1,15 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { Users, PiggyBank, Banknote, Clock } from 'lucide-react-native';
+import { Users, Coins, HandCoins, Clock } from 'lucide-react-native';
 import { Colors, Fonts, Spacing } from '@/constants';
 
 export function UsersIcon({ color }: { color: string }) {
   return <Users size={18} color={color} strokeWidth={1.8} />;
 }
 export function PiggyIcon({ color }: { color: string }) {
-  return <PiggyBank size={18} color={color} strokeWidth={1.8} />;
+  return <Coins size={18} color={color} strokeWidth={1.8} />;
 }
 export function CreditIcon({ color }: { color: string }) {
-  return <Banknote size={18} color={color} strokeWidth={1.8} />;
+  return <HandCoins size={18} color={color} strokeWidth={1.8} />;
 }
 export function ClockIcon({ color }: { color: string }) {
   return <Clock size={18} color={color} strokeWidth={1.8} />;

@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { ArrowDownToLine, ArrowUpFromLine, CreditCard, Lock, LockOpen } from 'lucide-react-native';
+import { Download, Upload, HandCoins, Vault, Unlock } from 'lucide-react-native';
 import { Colors } from '@/constants';
 
 type TxKind = 'deposit' | 'withdrawal' | 'loan_credit' | 'transfer_to_blocked' | 'transfer_from_blocked';
@@ -22,11 +22,11 @@ const STROKE: Record<TxKind, string> = {
 
 function KindIcon({ kind, color }: { kind: TxKind; color: string }) {
   const props = { size: 20, color, strokeWidth: 1.8 } as const;
-  if (kind === 'withdrawal')           return <ArrowUpFromLine {...props} />;
-  if (kind === 'loan_credit')          return <CreditCard      {...props} />;
-  if (kind === 'transfer_to_blocked')  return <Lock            {...props} />;
-  if (kind === 'transfer_from_blocked')return <LockOpen        {...props} />;
-  return <ArrowDownToLine {...props} />;
+  if (kind === 'withdrawal')           return <Upload    {...props} />;
+  if (kind === 'loan_credit')          return <HandCoins {...props} />;
+  if (kind === 'transfer_to_blocked')  return <Vault     {...props} />;
+  if (kind === 'transfer_from_blocked')return <Unlock    {...props} />;
+  return <Download {...props} />;
 }
 
 export function TxIcon({ kind }: { kind: string }) {
