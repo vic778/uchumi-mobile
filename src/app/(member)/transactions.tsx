@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import Svg, { Path } from 'react-native-svg';
 import { MemberTabBar } from '@/components/navigation/member-tab-bar';
+import { BackButton } from '@/components/ui/back-button';
 import { TxIcon } from '@/components/ui/tx-icon';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getTransactions } from '@/services/member/account';
@@ -41,11 +42,7 @@ export default function TransactionsScreen() {
       {/* Teal header */}
       <View style={[styles.header, { paddingTop: insets.top + 14 }]}>
         <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-            <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
-              <Path d="M19 12H5M12 5L5 12L12 19" stroke="#fff" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-            </Svg>
-          </TouchableOpacity>
+          <BackButton onPress={() => router.back()} />
           <Text style={styles.headerTitle}>Vos transactions</Text>
           <View style={{ width: 36 }} />
         </View>
@@ -116,7 +113,6 @@ const styles = StyleSheet.create({
   header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three },
   headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   headerTitle: { fontFamily: Fonts.bold, fontSize: 16, color: Colors.white },
-  backBtn: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
   subHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: Spacing.four, paddingTop: Spacing.three, paddingBottom: Spacing.two, borderBottomWidth: 1, borderBottomColor: Colors.coolGray, backgroundColor: Colors.white },
   subLabel: { fontFamily: Fonts.bold, fontSize: 13, color: Colors.primary, letterSpacing: 0.8 },
   searchWrap: { flexDirection: 'row', alignItems: 'center', margin: Spacing.three, backgroundColor: 'rgba(108,122,137,0.12)', borderRadius: 12, paddingHorizontal: Spacing.three, paddingVertical: 10 },
