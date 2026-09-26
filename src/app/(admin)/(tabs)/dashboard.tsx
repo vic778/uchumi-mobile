@@ -3,6 +3,7 @@ import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, Toucha
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Bell } from 'lucide-react-native';
+import { TxIcon } from '@/components/ui/tx-icon';
 import { TxDetailModal, type TxDetailData } from '@/components/ui/tx-detail-modal';
 import { KpiCard, UsersIcon, PiggyIcon, CreditIcon, ClockIcon } from '@/components/admin/kpi-card';
 import { ComboChart, COLOR_DEPOSIT, COLOR_LOAN, COLOR_RATIO } from '@/components/admin/combo-chart';
@@ -116,21 +117,16 @@ export default function AdminDashboardScreen() {
               <Text style={styles.seeAll}>Voir tout →</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.tableHead}>
-            <Text style={[styles.thCell, { flex: 2 }]}>MEMBRE</Text>
-            <Text style={styles.thCell}>TYPE</Text>
-            <Text style={[styles.thCell, { textAlign: 'right' }]}>MONTANT</Text>
-          </View>
-          {d.recent_transactions.length === 0 && <Text style={styles.emptyText}>Aucune transaction récente.</Text>}
+{d.recent_transactions.length === 0 && <Text style={styles.emptyText}>Aucune transaction récente.</Text>}
           {d.recent_transactions.map((t) => {
             const meta   = TX_META[t.kind] ?? { label: t.kind, credit: false };
             const amtClr = meta.credit ? Colors.growth : Colors.danger;
             const sign   = meta.credit ? '+' : '−';
             return (
               <TouchableOpacity key={t.id} style={styles.tableRow} onPress={() => setSelectedTx({ ...t })} activeOpacity={0.7}>
-                <Text style={[styles.tdName, { flex: 2 }]} numberOfLines={1}>{t.member ?? '—'}</Text>
-                <View style={styles.tdKindWrap}>
-                  <View style={[styles.txDot, { backgroundColor: amtClr }]} />
+                <TxIcon kind={t.kind} />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.tdName} numberOfLines={1}>{t.member ?? '—'}</Text>
                   <Text style={styles.tdKind}>{meta.label}</Text>
                 </View>
                 <Text style={[styles.tdAmount, { color: amtClr }]}>{sign}{fmtK(t.amount)}</Text>
@@ -194,13 +190,9 @@ const styles = StyleSheet.create({
   legendSwatch:  { width: 10, height: 10, borderRadius: 2 },
   legendLine:    { width: 16, height: 2, borderRadius: 1 },
   legendLabel:   { fontFamily: Fonts.regular, fontSize: 10, color: Colors.steelGray },
-  tableHead:     { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: Colors.coolGray, paddingBottom: 6 },
-  thCell:        { fontFamily: Fonts.bold, fontSize: 9, color: Colors.steelGray, letterSpacing: 0.8, flex: 1 },
-  tableRow:      { flexDirection: 'row', alignItems: 'center', paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
+  tableRow:      { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
   tdName:        { fontFamily: Fonts.medium, fontSize: 13, color: Colors.charcoal },
-  tdKindWrap:    { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 5 },
-  txDot:         { width: 7, height: 7, borderRadius: 4 },
-  tdKind:        { fontFamily: Fonts.regular, fontSize: 12, color: Colors.steelGray },
+  tdKind:        { fontFamily: Fonts.regular, fontSize: 12, color: Colors.steelGray, marginTop: 1 },
   tdAmount:      { fontFamily: Fonts.bold, fontSize: 13 },
   loanRow:       { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
   loanMember:    { fontFamily: Fonts.medium, fontSize: 14, color: Colors.charcoal },
