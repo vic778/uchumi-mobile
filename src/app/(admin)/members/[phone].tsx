@@ -3,8 +3,9 @@ import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TouchableOpacit
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BackButton } from '@/components/ui/back-button';
+import { TxDetailModal, type TxDetailData } from '@/components/ui/tx-detail-modal';
 import { Colors, Fonts, Spacing } from '@/constants';
-import { getMember, suspendMember, activateMember, promoteCollector, demoteMember, type AdminMemberDetail } from '@/services/admin';
+import { getMember, suspendMember, activateMember, promoteCollector, demoteMember, type AdminMemberDetail, type AdminTransaction } from '@/services/admin';
 
 
 const CURRENCY   = 'CDF';
@@ -48,6 +49,7 @@ export default function AdminMemberDetailScreen() {
   const [loading, setLoading]   = useState(true);
   const [acting, setActing]     = useState(false);
   const [tab, setTab]           = useState<'transactions' | 'loans' | 'documents'>('transactions');
+  const [selectedTx, setSelectedTx] = useState<TxDetailData | null>(null);
 
   const load = useCallback(async () => {
     try { setMember(await getMember(decodeURIComponent(phone))); } catch {}
@@ -161,7 +163,11 @@ export default function AdminMemberDetailScreen() {
           <View style={styles.card}>
             {m.transactions.length === 0 && <Text style={styles.empty}>Aucune transaction.</Text>}
             {m.transactions.map((t) => (
-              <View key={t.id} style={styles.txRow}>
+              <TouchableOpacity
+                key={t.id}
+                style={styles.txRow}
+                onPress={() => setSelectedTx({ ...t, member: m.full_name, member_phone: m.phone_number })}
+                activeOpacity={0.7}>
                 <View style={[styles.txDot, { backgroundColor: KIND_COLOR[t.kind] ?? Colors.steelGray }]} />
                 <View style={{ flex: 1 }}>
                   <Text style={styles.txKind}>{KIND_LABEL[t.kind] ?? t.kind}</Text>
@@ -170,7 +176,7 @@ export default function AdminMemberDetailScreen() {
                 <Text style={[styles.txAmount, { color: KIND_COLOR[t.kind] ?? Colors.steelGray }]}>
                   {['deposit', 'loan_credit'].includes(t.kind) ? '+' : '-'}{fmt(t.amount)} {CURRENCY}
                 </Text>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         )}
@@ -214,6 +220,8 @@ export default function AdminMemberDetailScreen() {
           </View>
         )}
       </ScrollView>
+
+      <TxDetailModal tx={selectedTx} onClose={() => setSelectedTx(null)} />
     </View>
   );
 }
