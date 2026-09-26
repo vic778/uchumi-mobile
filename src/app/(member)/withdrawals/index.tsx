@@ -56,10 +56,10 @@ const styles = StyleSheet.create({
   header: { paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   title: { fontFamily: Fonts.bold, fontSize: 24, color: Colors.charcoal },
   newBtn: { backgroundColor: Colors.charcoal, borderRadius: 20, paddingHorizontal: Spacing.three, paddingVertical: Spacing.one + 2 },
-  newLabel: { fontFamily: Fonts.semiBold, fontSize: 13, color: Colors.white },
+  newLabel: { fontFamily: Fonts.semiBold, fontSize: 15, color: Colors.white },
   card: { backgroundColor: Colors.white, borderRadius: 16, padding: Spacing.three, marginBottom: Spacing.two },
   cardRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.one },
   amount: { fontFamily: Fonts.bold, fontSize: 20, color: Colors.charcoal },
-  date: { fontFamily: Fonts.regular, fontSize: 13, color: Colors.steelGray },
-  empty: { fontFamily: Fonts.regular, fontSize: 14, color: Colors.steelGray, textAlign: 'center', marginTop: 40 },
+  date: { fontFamily: Fonts.regular, fontSize: 15, color: Colors.steelGray },
+  empty: { fontFamily: Fonts.regular, fontSize: 16, color: Colors.steelGray, textAlign: 'center', marginTop: 40 },
 });
