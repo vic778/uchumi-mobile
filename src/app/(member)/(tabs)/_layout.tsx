@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path, Circle } from 'react-native-svg';
 import { Colors, Fonts } from '@/constants';
+import { usePushNotifications } from '@/hooks/use-push-notifications';
 
 function HomeIcon({ color }: { color: string }) {
   return (
@@ -91,6 +92,7 @@ function TabBar({ state }: any) {
 }
 
 export default function TabsLayout() {
+  usePushNotifications();
   return (
     <Tabs
       screenOptions={{ headerShown: false }}

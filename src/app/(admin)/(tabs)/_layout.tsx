@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path, Circle, Rect } from 'react-native-svg';
 import { Colors, Fonts } from '@/constants';
+import { usePushNotifications } from '@/hooks/use-push-notifications';
 
 function DashIcon({ color }: { color: string }) {
   return (
@@ -93,6 +94,7 @@ function AdminTabBar({ state }: any) {
 }
 
 export default function AdminTabsLayout() {
+  usePushNotifications();
   return (
     <Tabs
       screenOptions={{ headerShown: false }}
