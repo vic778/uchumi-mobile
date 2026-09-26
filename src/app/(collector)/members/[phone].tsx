@@ -4,6 +4,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Plus } from 'lucide-react-native';
 import { BackButton } from '@/components/ui/back-button';
+import { TxIcon } from '@/components/ui/tx-icon';
 import { TxDetailModal, type TxDetailData } from '@/components/ui/tx-detail-modal';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getMember, type CollectorMember, type CollectorTransaction } from '@/services/collector';
@@ -104,6 +105,7 @@ function TxnRow({ txn, last, memberName, onPress }: { txn: CollectorTransaction;
   const isCredit = txn.kind === 'deposit' || txn.kind === 'loan_credit' || txn.kind === 'transfer_from_blocked';
   return (
     <TouchableOpacity style={[styles.row, !last && styles.rowBorder]} onPress={onPress} activeOpacity={0.7}>
+      <TxIcon kind={txn.kind} />
       <View style={{ flex: 1 }}>
         <Text style={styles.rowKind}>{KIND_LABELS[txn.kind] ?? txn.kind}</Text>
         <Text style={styles.rowRef}>{txn.reference}</Text>

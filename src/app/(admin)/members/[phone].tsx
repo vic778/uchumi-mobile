@@ -3,6 +3,7 @@ import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TouchableOpacit
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BackButton } from '@/components/ui/back-button';
+import { TxIcon } from '@/components/ui/tx-icon';
 import { TxDetailModal, type TxDetailData } from '@/components/ui/tx-detail-modal';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getMember, suspendMember, activateMember, promoteCollector, demoteMember, type AdminMemberDetail, type AdminTransaction } from '@/services/admin';
@@ -168,7 +169,7 @@ export default function AdminMemberDetailScreen() {
                 style={styles.txRow}
                 onPress={() => setSelectedTx({ ...t, member: m.full_name, member_phone: m.phone_number })}
                 activeOpacity={0.7}>
-                <View style={[styles.txDot, { backgroundColor: KIND_COLOR[t.kind] ?? Colors.steelGray }]} />
+                <TxIcon kind={t.kind} />
                 <View style={{ flex: 1 }}>
                   <Text style={styles.txKind}>{KIND_LABEL[t.kind] ?? t.kind}</Text>
                   <Text style={styles.txRef}>{t.reference} · {fmtD(t.created_at)}</Text>
@@ -261,7 +262,6 @@ const styles = StyleSheet.create({
   card: { backgroundColor: Colors.white, borderRadius: 14, padding: Spacing.three, borderWidth: 1, borderColor: Colors.coolGray, gap: 0 },
 
   txRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
-  txDot: { width: 8, height: 8, borderRadius: 4 },
   txKind: { fontFamily: Fonts.semiBold, fontSize: 14, color: Colors.charcoal },
   txRef:  { fontFamily: Fonts.regular, fontSize: 12, color: Colors.steelGray },
   txAmount: { fontFamily: Fonts.bold, fontSize: 13 },
