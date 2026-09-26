@@ -67,37 +67,45 @@ export function MemberTabBar({ active }: { active: MemberTab }) {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, { paddingBottom: Math.max(insets.bottom, 6) }]}>
-      {TABS.map((tab) => {
-        const isActive = active === tab.id;
-        const color = isActive ? Colors.primary : Colors.steelGray;
-        return (
-          <Pressable
-            key={tab.id}
-            accessibilityRole="button"
-            accessibilityLabel={tab.label}
-            accessibilityState={{ selected: isActive }}
-            onPress={() => { if (!isActive) router.replace(tab.route as Href); }}
-            style={({ pressed }) => [styles.tab, pressed && styles.pressed]}>
-            <tab.Icon color={color} />
-            <Text style={[styles.label, { color }]}>{tab.label}</Text>
-          </Pressable>
-        );
-      })}
+    <View style={[styles.wrapper, { bottom: 0 }]}>
+      <View style={styles.bar}>
+        {TABS.map((tab) => {
+          const isActive = active === tab.id;
+          const color = isActive ? Colors.primary : Colors.steelGray;
+          return (
+            <Pressable
+              key={tab.id}
+              accessibilityRole="button"
+              accessibilityLabel={tab.label}
+              accessibilityState={{ selected: isActive }}
+              onPress={() => { if (!isActive) router.replace(tab.route as Href); }}
+              style={({ pressed }) => [styles.tab, pressed && styles.pressed]}>
+              <tab.Icon color={color} />
+              <Text style={[styles.label, { color }]}>{tab.label}</Text>
+            </Pressable>
+          );
+        })}
+      </View>
+      {insets.bottom > 0 && (
+        <View style={{ height: insets.bottom, backgroundColor: '#000' }} />
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    position: 'absolute', left: 0, right: 0, bottom: 0,
+  wrapper: {
+    position: 'absolute', left: 0, right: 0,
+    zIndex: 120,
+    elevation: 8,
+  },
+  bar: {
     backgroundColor: Colors.white,
     borderTopWidth: 1,
     borderTopColor: Colors.coolGray,
     flexDirection: 'row',
     paddingTop: 8,
-    zIndex: 120,
-    elevation: 8,
+    paddingBottom: 6,
   },
   tab: { flex: 1, alignItems: 'center', gap: 3, paddingVertical: 4 },
   label: { fontFamily: Fonts.medium, fontSize: 12, lineHeight: 13 },
