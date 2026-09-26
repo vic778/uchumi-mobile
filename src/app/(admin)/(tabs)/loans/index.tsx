@@ -231,6 +231,7 @@ export default function AdminLoansScreen() {
         ))}
       </ScrollView>
 
+      <View style={{ flex: 1 }}>
       {loading ? (
         <ActivityIndicator color={Colors.primary} style={{ marginTop: 60 }} />
       ) : (
@@ -254,6 +255,7 @@ export default function AdminLoansScreen() {
           )}
         />
       )}
+      </View>
     </View>
   );
 }
@@ -280,7 +282,7 @@ const styles = StyleSheet.create({
   statValue: { fontFamily: Fonts.bold, fontSize: 15, color: Colors.white },
 
   // Filters
-  filterScroll: { backgroundColor: Colors.white, borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
+  filterScroll: { backgroundColor: Colors.white, borderBottomWidth: 1, borderBottomColor: Colors.coolGray, flexGrow: 0 },
   filterRow:    { flexDirection: 'row', gap: 8, paddingHorizontal: Spacing.three, paddingVertical: 10 },
   filterChip:   { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20, backgroundColor: '#f1f5f9' },
   filterChipActive: { backgroundColor: Colors.primary },
