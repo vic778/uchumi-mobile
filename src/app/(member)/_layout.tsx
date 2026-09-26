@@ -54,7 +54,7 @@ function MoreIcon({ color }: { color: string }) {
 
 const TABS = [
   { name: 'dashboard',     label: 'Accueil', Icon: HomeIcon },
-  { name: 'savings',       label: 'Épargne', Icon: SavingsIcon },
+  { name: 'savings',       label: 'Comptes', Icon: SavingsIcon },
   { name: 'loans',         label: 'Prêts',   Icon: LoanIcon },
   { name: 'notifications', label: 'Alertes', Icon: BellIcon },
   { name: 'profile',       label: 'Plus',    Icon: MoreIcon },
@@ -113,6 +113,9 @@ export default function MemberLayout() {
       <Tabs.Screen name="transactions" options={{ href: null }} />
       <Tabs.Screen name="withdrawals" options={{ href: null }} />
       <Tabs.Screen name="documents" options={{ href: null }} />
+      <Tabs.Screen name="about" options={{ href: null }} />
+      <Tabs.Screen name="terms" options={{ href: null }} />
+      <Tabs.Screen name="privacy" options={{ href: null }} />
     </Tabs>
   );
 }
