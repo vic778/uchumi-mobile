@@ -62,5 +62,5 @@ const styles = StyleSheet.create({
   title: { fontFamily: Fonts.bold, fontSize: 22, color: Colors.charcoal },
   scroll: { paddingHorizontal: Spacing.four, paddingBottom: Spacing.six, gap: Spacing.four },
   note: { backgroundColor: Colors.coolGray, borderRadius: 12, padding: Spacing.three },
-  noteText: { fontFamily: Fonts.regular, fontSize: 13, color: Colors.steelGray },
+  noteText: { fontFamily: Fonts.regular, fontSize: 15, color: Colors.steelGray },
 });
