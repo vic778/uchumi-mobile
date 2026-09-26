@@ -1,17 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Svg, { Circle, Path, Rect } from 'react-native-svg';
 import { Colors, Fonts, Spacing } from '@/constants';
-
-function LockIcon() {
-  return (
-    <Svg width={56} height={56} viewBox="0 0 24 24" fill="none">
-      <Rect x={3} y={11} width={18} height={11} rx={2} stroke="rgba(255,255,255,0.9)" strokeWidth={1.8} />
-      <Path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="rgba(255,255,255,0.9)" strokeWidth={1.8} strokeLinecap="round" />
-      <Circle cx={12} cy={16} r={1.5} fill="rgba(255,255,255,0.9)" />
-    </Svg>
-  );
-}
+import { UchumiLogo } from './uchumi-logo';
 
 type Props = {
   visible: boolean;
@@ -41,10 +31,7 @@ export function AppLockScreen({ visible, onUnlock }: Props) {
   return (
     <Modal visible={visible} animationType="fade" statusBarTranslucent hardwareAccelerated>
       <View style={styles.root}>
-        <View style={styles.iconWrap}>
-          <LockIcon />
-        </View>
-        <Text style={styles.appName}>Uchumi</Text>
+        <UchumiLogo style={styles.logo} />
 
         {dismissed && (
           <TouchableOpacity style={styles.retryBtn} onPress={trigger} activeOpacity={0.8}>
@@ -57,9 +44,8 @@ export function AppLockScreen({ visible, onUnlock }: Props) {
 }
 
 const styles = StyleSheet.create({
-  root:     { flex: 1, backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center', padding: Spacing.six },
-  iconWrap: { width: 90, height: 90, borderRadius: 24, backgroundColor: 'rgba(255,255,255,0.12)', alignItems: 'center', justifyContent: 'center', marginBottom: Spacing.three },
-  appName:  { fontFamily: Fonts.bold, fontSize: 30, color: Colors.white },
+  root: { flex: 1, backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center', padding: Spacing.six },
+  logo: { width: 180, height: 60, resizeMode: 'contain', marginBottom: Spacing.three, tintColor: Colors.white },
   retryBtn: { marginTop: Spacing.six, paddingHorizontal: Spacing.four, paddingVertical: Spacing.two + 2, borderRadius: 12, borderWidth: 1, borderColor: 'rgba(255,255,255,0.35)', backgroundColor: 'rgba(255,255,255,0.12)' },
   retryText:{ fontFamily: Fonts.semiBold, fontSize: 15, color: Colors.white },
 });
