@@ -70,14 +70,14 @@ export default function AdminLoansScreen() {
       </ScrollView>
 
       {loading ? (
-        <ActivityIndicator color={ADMIN_DARK} style={{ marginTop: 60 }} />
+        <ActivityIndicator color={Colors.primary} style={{ marginTop: 60 }} />
       ) : (
         <FlatList
           data={loans}
           keyExtractor={l => String(l.id)}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={ADMIN_DARK} />}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           ListEmptyComponent={<Text style={styles.emptyText}>Aucun prêt dans cette catégorie.</Text>}
           renderItem={({ item }) => {
@@ -113,14 +113,14 @@ export default function AdminLoansScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.background },
-  header: { backgroundColor: ADMIN_DARK, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' },
+  header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' },
   headerTitle: { fontFamily: Fonts.bold, fontSize: 22, color: Colors.white },
   headerCount: { fontFamily: Fonts.bold, fontSize: 14, color: 'rgba(255,255,255,0.5)' },
 
   filterScroll: { backgroundColor: Colors.white, borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
   filterRow: { flexDirection: 'row', gap: Spacing.two, paddingHorizontal: Spacing.three, paddingVertical: Spacing.two + 2 },
   filterChip: { paddingHorizontal: Spacing.two + 2, paddingVertical: 6, borderRadius: 20, borderWidth: 1.5, borderColor: Colors.muted },
-  filterChipActive: { backgroundColor: ADMIN_DARK, borderColor: ADMIN_DARK },
+  filterChipActive: { backgroundColor: Colors.primary, borderColor: ADMIN_DARK },
   filterLabel: { fontFamily: Fonts.semiBold, fontSize: 13, color: Colors.steelGray },
   filterLabelActive: { color: Colors.white },
 

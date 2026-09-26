@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getKyc, type AdminKYC } from '@/services/admin';
 
-const ADMIN_DARK = '#0f172a';
+
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
   pending:  { bg: Colors.warning + '22', text: Colors.warning },
@@ -67,14 +67,14 @@ export default function AdminKYCScreen() {
       </View>
 
       {loading ? (
-        <ActivityIndicator color={ADMIN_DARK} style={{ marginTop: 60 }} />
+        <ActivityIndicator color={Colors.primary} style={{ marginTop: 60 }} />
       ) : (
         <FlatList
           data={docs}
           keyExtractor={d => String(d.id)}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={ADMIN_DARK} />}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           ListEmptyComponent={<Text style={styles.emptyText}>Aucun document.</Text>}
           renderItem={({ item }) => {
@@ -112,13 +112,13 @@ export default function AdminKYCScreen() {
 
 const styles = StyleSheet.create({
   root:   { flex: 1, backgroundColor: Colors.background },
-  header: { backgroundColor: ADMIN_DARK, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' },
+  header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' },
   headerTitle: { fontFamily: Fonts.bold, fontSize: 22, color: Colors.white },
   pendingBadge: { fontFamily: Fonts.bold, fontSize: 12, color: Colors.warning },
 
   filterRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two, padding: Spacing.three, backgroundColor: Colors.white, borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
   filterChip: { paddingHorizontal: Spacing.two + 2, paddingVertical: 6, borderRadius: 20, borderWidth: 1.5, borderColor: Colors.muted },
-  filterChipActive: { backgroundColor: ADMIN_DARK, borderColor: ADMIN_DARK },
+  filterChipActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
   filterLabel: { fontFamily: Fonts.semiBold, fontSize: 13, color: Colors.steelGray },
   filterLabelActive: { color: Colors.white },
 
@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
   emptyText: { fontFamily: Fonts.regular, fontSize: 14, color: Colors.steelGray, textAlign: 'center', paddingVertical: Spacing.six },
 
   row: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, paddingHorizontal: Spacing.four, paddingVertical: Spacing.two + 2 },
-  initials: { width: 44, height: 44, borderRadius: 22, backgroundColor: ADMIN_DARK + '15', alignItems: 'center', justifyContent: 'center' },
-  initialsText: { fontFamily: Fonts.bold, fontSize: 16, color: ADMIN_DARK },
+  initials: { width: 44, height: 44, borderRadius: 22, backgroundColor: Colors.primary + '15', alignItems: 'center', justifyContent: 'center' },
+  initialsText: { fontFamily: Fonts.bold, fontSize: 16, color: Colors.primary },
   name: { fontFamily: Fonts.semiBold, fontSize: 15, color: Colors.charcoal },
   docLabel: { fontFamily: Fonts.regular, fontSize: 13, color: Colors.steelGray },
   docsRow: { flexDirection: 'row', gap: 4, marginTop: 4 },

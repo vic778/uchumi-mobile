@@ -57,7 +57,7 @@ export default function AdminLoanDetailScreen() {
 
   if (loading) return (
     <View style={[styles.root, { alignItems: 'center', justifyContent: 'center' }]}>
-      <ActivityIndicator color={ADMIN_DARK} />
+      <ActivityIndicator color={Colors.primary} />
     </View>
   );
 
@@ -220,7 +220,7 @@ export default function AdminLoanDetailScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.background },
-  header: { backgroundColor: ADMIN_DARK, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.two },
+  header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.two },
   headerTitle: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white, flex: 1, textAlign: 'center' },
   scroll: { padding: Spacing.four, gap: Spacing.three },
 
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
 
   actionsRow: { flexDirection: 'row', gap: Spacing.two },
   btn:        { borderRadius: 12, paddingVertical: 13, alignItems: 'center', borderWidth: 1.5 },
-  btnPrimary: { backgroundColor: ADMIN_DARK, borderColor: ADMIN_DARK, flex: 1 },
+  btnPrimary: { backgroundColor: Colors.primary, borderColor: ADMIN_DARK, flex: 1 },
   btnReject:  { borderColor: Colors.danger + '50', backgroundColor: Colors.danger + '10', flex: 1 },
   btnDisabled:{ opacity: 0.4 },
   btnText:    { fontFamily: Fonts.bold, fontSize: 15 },

@@ -6,7 +6,7 @@ import { BackButton } from '@/components/ui/back-button';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getKycDetail, approveKyc, rejectKyc, type AdminKYC } from '@/services/admin';
 
-const ADMIN_DARK = '#0f172a';
+
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
   pending:  { bg: Colors.warning + '22', text: Colors.warning },
@@ -59,7 +59,7 @@ export default function AdminKYCDetailScreen() {
 
   if (loading) return (
     <View style={[styles.root, { alignItems: 'center', justifyContent: 'center' }]}>
-      <ActivityIndicator color={ADMIN_DARK} />
+      <ActivityIndicator color={Colors.primary} />
     </View>
   );
 
@@ -154,14 +154,14 @@ export default function AdminKYCDetailScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.background },
-  header: { backgroundColor: ADMIN_DARK, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.two },
+  header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.two },
   headerTitle: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white, flex: 1, textAlign: 'center' },
   scroll: { padding: Spacing.four, gap: Spacing.three },
 
   card: { backgroundColor: Colors.white, borderRadius: 14, padding: Spacing.three, borderWidth: 1, borderColor: Colors.coolGray, gap: Spacing.two },
   memberRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
-  initials: { width: 48, height: 48, borderRadius: 24, backgroundColor: ADMIN_DARK + '12', alignItems: 'center', justifyContent: 'center' },
-  initialsText: { fontFamily: Fonts.bold, fontSize: 18, color: ADMIN_DARK },
+  initials: { width: 48, height: 48, borderRadius: 24, backgroundColor: Colors.primary + '12', alignItems: 'center', justifyContent: 'center' },
+  initialsText: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.primary },
   memberName: { fontFamily: Fonts.bold, fontSize: 16, color: Colors.charcoal },
   memberPhone: { fontFamily: Fonts.regular, fontSize: 13, color: Colors.steelGray },
   statusBadge: { borderRadius: 10, paddingHorizontal: 10, paddingVertical: 4 },

@@ -6,7 +6,7 @@ import { BackButton } from '@/components/ui/back-button';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getWithdrawals, approveWithdrawal, rejectWithdrawal, type AdminWithdrawal } from '@/services/admin';
 
-const ADMIN_DARK = '#0f172a';
+
 const CURRENCY   = 'CDF';
 const fmt  = (n: number) => n.toLocaleString('fr-CD');
 const fmtD = (s: string) => new Date(s).toLocaleDateString('fr-CD', { day: '2-digit', month: 'short' });
@@ -69,7 +69,7 @@ export default function AdminWithdrawalsScreen() {
 
   if (loading) return (
     <View style={[styles.root, { alignItems: 'center', justifyContent: 'center' }]}>
-      <ActivityIndicator color={ADMIN_DARK} />
+      <ActivityIndicator color={Colors.primary} />
     </View>
   );
 
@@ -84,7 +84,7 @@ export default function AdminWithdrawalsScreen() {
       <ScrollView
         contentContainerStyle={[styles.scroll, { paddingBottom: Spacing.six }]}
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={ADMIN_DARK} />}>
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}>
 
         {/* Pending */}
         <Text style={styles.sectionTitle}>EN ATTENTE D'APPROBATION</Text>
@@ -168,7 +168,7 @@ export default function AdminWithdrawalsScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.background },
-  header: { backgroundColor: ADMIN_DARK, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.two },
+  header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.two },
   headerTitle: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white, flex: 1, textAlign: 'center' },
   scroll: { padding: Spacing.four, gap: Spacing.two },
   sectionTitle: { fontFamily: Fonts.bold, fontSize: 11, color: Colors.steelGray, letterSpacing: 0.8, marginBottom: Spacing.one },
@@ -178,8 +178,8 @@ const styles = StyleSheet.create({
   txCard: { backgroundColor: Colors.white, borderRadius: 14, padding: Spacing.three, borderWidth: 1, borderColor: Colors.coolGray, gap: Spacing.two },
   txCardMuted: { opacity: 0.9 },
   txTop: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
-  initials: { width: 44, height: 44, borderRadius: 22, backgroundColor: ADMIN_DARK + '12', alignItems: 'center', justifyContent: 'center' },
-  initialsText: { fontFamily: Fonts.bold, fontSize: 16, color: ADMIN_DARK },
+  initials: { width: 44, height: 44, borderRadius: 22, backgroundColor: Colors.primary + '12', alignItems: 'center', justifyContent: 'center' },
+  initialsText: { fontFamily: Fonts.bold, fontSize: 16, color: Colors.primary },
   memberName: { fontFamily: Fonts.semiBold, fontSize: 15, color: Colors.charcoal },
   ref:  { fontFamily: Fonts.regular, fontSize: 12, color: Colors.steelGray },
   meta: { fontFamily: Fonts.regular, fontSize: 11, color: Colors.steelGray },
@@ -190,6 +190,6 @@ const styles = StyleSheet.create({
   actionsRow: { flexDirection: 'row', gap: Spacing.two },
   btn:       { flex: 1, borderRadius: 10, paddingVertical: 11, alignItems: 'center', borderWidth: 1.5 },
   btnReject:  { borderColor: Colors.danger + '50', backgroundColor: Colors.danger + '10' },
-  btnApprove: { backgroundColor: ADMIN_DARK, borderColor: ADMIN_DARK },
+  btnApprove: { backgroundColor: Colors.primary, borderColor: Colors.primary },
   btnText:   { fontFamily: Fonts.bold, fontSize: 14 },
 });

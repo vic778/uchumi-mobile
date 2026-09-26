@@ -6,7 +6,7 @@ import Svg, { Path } from 'react-native-svg';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getMembers, type AdminMember } from '@/services/admin';
 
-const ADMIN_DARK = '#0f172a';
+
 const CURRENCY   = 'CDF';
 const fmt = (n: number) => n.toLocaleString('fr-CD');
 
@@ -86,14 +86,14 @@ export default function AdminMembersScreen() {
       </View>
 
       {loading ? (
-        <ActivityIndicator color={ADMIN_DARK} style={{ marginTop: 60 }} />
+        <ActivityIndicator color={Colors.primary} style={{ marginTop: 60 }} />
       ) : (
         <FlatList
           data={filtered}
           keyExtractor={m => String(m.id)}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={ADMIN_DARK} />}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           ListEmptyComponent={
             <Text style={styles.emptyText}>
@@ -130,13 +130,13 @@ export default function AdminMembersScreen() {
 
 const styles = StyleSheet.create({
   root:   { flex: 1, backgroundColor: Colors.background },
-  header: { backgroundColor: ADMIN_DARK, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' },
+  header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' },
   headerTitle: { fontFamily: Fonts.bold, fontSize: 22, color: Colors.white },
   headerCount: { fontFamily: Fonts.bold, fontSize: 14, color: 'rgba(255,255,255,0.5)' },
 
   filterRow: { flexDirection: 'row', gap: Spacing.two, padding: Spacing.three, backgroundColor: Colors.white, borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
   filterChip: { paddingHorizontal: Spacing.two + 2, paddingVertical: 6, borderRadius: 20, borderWidth: 1.5, borderColor: Colors.muted },
-  filterChipActive: { backgroundColor: ADMIN_DARK, borderColor: ADMIN_DARK },
+  filterChipActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
   filterLabel: { fontFamily: Fonts.semiBold, fontSize: 13, color: Colors.steelGray },
   filterLabelActive: { color: Colors.white },
 
@@ -148,9 +148,9 @@ const styles = StyleSheet.create({
   emptyText: { fontFamily: Fonts.regular, fontSize: 14, color: Colors.steelGray, textAlign: 'center', paddingVertical: Spacing.six },
 
   row: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, paddingHorizontal: Spacing.four, paddingVertical: Spacing.two + 2 },
-  initials: { width: 44, height: 44, borderRadius: 22, backgroundColor: ADMIN_DARK + '15', alignItems: 'center', justifyContent: 'center' },
+  initials: { width: 44, height: 44, borderRadius: 22, backgroundColor: Colors.primary + '15', alignItems: 'center', justifyContent: 'center' },
   initialsWarning: { backgroundColor: Colors.danger + '18' },
-  initialsText: { fontFamily: Fonts.bold, fontSize: 16, color: ADMIN_DARK },
+  initialsText: { fontFamily: Fonts.bold, fontSize: 16, color: Colors.primary },
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   name: { fontFamily: Fonts.semiBold, fontSize: 15, color: Colors.charcoal },
   phone: { fontFamily: Fonts.regular, fontSize: 13, color: Colors.steelGray },

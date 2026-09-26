@@ -5,7 +5,7 @@ import Svg, { Path } from 'react-native-svg';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { logout } from '@/services/auth';
 
-const ADMIN_DARK = '#0f172a';
+
 
 type MenuItem = { label: string; icon: string; onPress: () => void; danger?: boolean };
 
@@ -90,7 +90,7 @@ export default function AdminProfileScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.background },
-  header: { backgroundColor: ADMIN_DARK, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three },
+  header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three },
   headerSub:   { fontFamily: Fonts.bold, fontSize: 10, color: 'rgba(255,255,255,0.45)', letterSpacing: 1.2 },
   headerTitle: { fontFamily: Fonts.bold, fontSize: 22, color: Colors.white },
   scroll: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three },
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   menuRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: Spacing.three, paddingVertical: Spacing.three },
   menuBorder: { borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
   menuLeft: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three },
-  menuIconWrap: { width: 38, height: 38, borderRadius: 10, backgroundColor: ADMIN_DARK + '12', alignItems: 'center', justifyContent: 'center' },
+  menuIconWrap: { width: 38, height: 38, borderRadius: 10, backgroundColor: Colors.primary + '12', alignItems: 'center', justifyContent: 'center' },
   menuIcon: { fontSize: 18 },
   menuLabel: { fontFamily: Fonts.bold, fontSize: 16, color: Colors.charcoal },
 });

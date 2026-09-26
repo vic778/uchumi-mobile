@@ -6,7 +6,7 @@ import { BackButton } from '@/components/ui/back-button';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getMember, suspendMember, activateMember, promoteCollector, demoteMember, type AdminMemberDetail } from '@/services/admin';
 
-const ADMIN_DARK = '#0f172a';
+
 const CURRENCY   = 'CDF';
 const fmt  = (n: number) => n.toLocaleString('fr-CD');
 const fmtD = (s: string) => new Date(s).toLocaleDateString('fr-CD', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -74,7 +74,7 @@ export default function AdminMemberDetailScreen() {
 
   if (loading) return (
     <View style={[styles.root, { alignItems: 'center', justifyContent: 'center' }]}>
-      <ActivityIndicator color={ADMIN_DARK} />
+      <ActivityIndicator color={Colors.primary} />
     </View>
   );
 
@@ -97,8 +97,8 @@ export default function AdminMemberDetailScreen() {
           <Text style={styles.fullName}>{m.full_name}</Text>
           <Text style={styles.phone}>{m.phone_number}</Text>
           <View style={styles.badges}>
-            <View style={[styles.roleBadge, { backgroundColor: m.role === 'collector' ? Colors.primary + '22' : ADMIN_DARK + '12' }]}>
-              <Text style={[styles.roleBadgeText, { color: m.role === 'collector' ? Colors.primary : ADMIN_DARK }]}>
+            <View style={[styles.roleBadge, { backgroundColor: m.role === 'collector' ? Colors.primary + '22' : Colors.primary + '12' }]}>
+              <Text style={[styles.roleBadgeText, { color: m.role === 'collector' ? Colors.primary : Colors.primary }]}>
                 {m.role === 'collector' ? 'Collecteur' : 'Membre'}
               </Text>
             </View>
@@ -220,14 +220,14 @@ export default function AdminMemberDetailScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.background },
-  header: { backgroundColor: ADMIN_DARK, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.two },
+  header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.two },
   headerTitle: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white, flex: 1, textAlign: 'center' },
 
   scroll: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three },
 
   profileCard: { backgroundColor: Colors.white, borderRadius: 14, padding: Spacing.four, alignItems: 'center', borderWidth: 1, borderColor: Colors.coolGray, marginBottom: Spacing.three },
-  avatarWrap: { width: 72, height: 72, borderRadius: 36, backgroundColor: ADMIN_DARK + '12', alignItems: 'center', justifyContent: 'center', marginBottom: Spacing.two },
-  avatarText: { fontFamily: Fonts.bold, fontSize: 26, color: ADMIN_DARK },
+  avatarWrap: { width: 72, height: 72, borderRadius: 36, backgroundColor: Colors.primary + '12', alignItems: 'center', justifyContent: 'center', marginBottom: Spacing.two },
+  avatarText: { fontFamily: Fonts.bold, fontSize: 26, color: Colors.primary },
   fullName:   { fontFamily: Fonts.bold, fontSize: 18, color: Colors.charcoal, textAlign: 'center' },
   phone:      { fontFamily: Fonts.regular, fontSize: 14, color: Colors.steelGray, marginTop: 2 },
   badges:     { flexDirection: 'row', gap: Spacing.two, marginTop: Spacing.two },
