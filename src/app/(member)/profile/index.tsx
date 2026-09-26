@@ -42,6 +42,14 @@ export default function MemberProfileScreen() {
       ],
     },
     {
+      title: 'Informations',
+      items: [
+        { label: 'À propos de nous',             icon: 'ℹ️',  onPress: () => router.push('/(member)/about' as any) },
+        { label: "Conditions d'utilisation",      icon: '📜', onPress: () => router.push('/(member)/terms' as any) },
+        { label: 'Politique de confidentialité', icon: '🔒', onPress: () => router.push('/(member)/privacy' as any) },
+      ],
+    },
+    {
       items: [
         { label: 'Se déconnecter', icon: '🔴', onPress: handleLogout, danger: true },
       ],
@@ -59,7 +67,9 @@ export default function MemberProfileScreen() {
         showsVerticalScrollIndicator={false}>
 
         {sections.map((section, si) => (
-          <View key={si} style={styles.sectionCard}>
+          <View key={si}>
+            {section.title && <Text style={styles.sectionTitle}>{section.title.toUpperCase()}</Text>}
+          <View style={styles.sectionCard}>
             {section.items.map((item, ii) => (
               <TouchableOpacity
                 key={ii}
@@ -76,6 +86,7 @@ export default function MemberProfileScreen() {
               </TouchableOpacity>
             ))}
           </View>
+          </View>
         ))}
       </ScrollView>
 
@@ -88,6 +99,7 @@ const styles = StyleSheet.create({
   header: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.four, paddingBottom: Spacing.three },
   headerTitle: { fontFamily: Fonts.bold, fontSize: 18, color: Colors.white },
   scroll: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three },
+  sectionTitle: { fontFamily: Fonts.bold, fontSize: 12, color: Colors.steelGray, letterSpacing: 0.8, paddingHorizontal: 2, marginBottom: Spacing.one, marginTop: Spacing.one },
   sectionCard: { backgroundColor: Colors.white, borderRadius: 14, overflow: 'hidden', borderWidth: 1, borderColor: Colors.coolGray, marginBottom: Spacing.three },
   menuRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: Spacing.three, paddingVertical: Spacing.three },
   menuBorder: { borderBottomWidth: 1, borderBottomColor: Colors.coolGray },
