@@ -4,21 +4,36 @@ import { Colors } from '@/constants';
 
 type TxKind = 'deposit' | 'withdrawal' | 'loan_credit' | 'transfer_to_blocked' | 'transfer_from_blocked';
 
-const CONFIG: Record<TxKind, { bg: string; stroke: string; Icon: React.FC<{ color: string }> }> = {
-  deposit:              { bg: '#e8f5e9', stroke: Colors.growth,  Icon: ({ color }) => <ArrowDownToLine size={20} color={color} strokeWidth={1.8} /> },
-  withdrawal:           { bg: '#fef3e2', stroke: '#f59e0b',      Icon: ({ color }) => <ArrowUpFromLine size={20} color={color} strokeWidth={1.8} /> },
-  loan_credit:          { bg: '#e8f4f8', stroke: Colors.primary, Icon: ({ color }) => <CreditCard      size={20} color={color} strokeWidth={1.8} /> },
-  transfer_to_blocked:  { bg: '#f3f0ff', stroke: '#7c3aed',      Icon: ({ color }) => <Lock            size={20} color={color} strokeWidth={1.8} /> },
-  transfer_from_blocked:{ bg: '#f0fdf4', stroke: Colors.growth,  Icon: ({ color }) => <LockOpen        size={20} color={color} strokeWidth={1.8} /> },
+const BG: Record<TxKind, string> = {
+  deposit:               '#e8f5e9',
+  withdrawal:            '#fef3e2',
+  loan_credit:           '#e8f4f8',
+  transfer_to_blocked:   '#f3f0ff',
+  transfer_from_blocked: '#f0fdf4',
 };
 
-const FALLBACK = CONFIG.deposit;
+const STROKE: Record<TxKind, string> = {
+  deposit:               Colors.growth,
+  withdrawal:            '#f59e0b',
+  loan_credit:           Colors.primary,
+  transfer_to_blocked:   '#7c3aed',
+  transfer_from_blocked: Colors.growth,
+};
+
+function KindIcon({ kind, color }: { kind: TxKind; color: string }) {
+  const props = { size: 20, color, strokeWidth: 1.8 } as const;
+  if (kind === 'withdrawal')           return <ArrowUpFromLine {...props} />;
+  if (kind === 'loan_credit')          return <CreditCard      {...props} />;
+  if (kind === 'transfer_to_blocked')  return <Lock            {...props} />;
+  if (kind === 'transfer_from_blocked')return <LockOpen        {...props} />;
+  return <ArrowDownToLine {...props} />;
+}
 
 export function TxIcon({ kind }: { kind: string }) {
-  const cfg = CONFIG[kind as TxKind] ?? FALLBACK;
+  const k = (Object.keys(BG).includes(kind) ? kind : 'deposit') as TxKind;
   return (
-    <View style={[styles.box, { backgroundColor: cfg.bg }]}>
-      <cfg.Icon color={cfg.stroke} />
+    <View style={[styles.box, { backgroundColor: BG[k] }]}>
+      <KindIcon kind={k} color={STROKE[k]} />
     </View>
   );
 }
