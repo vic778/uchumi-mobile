@@ -53,11 +53,10 @@ function MoreIcon({ color }: { color: string }) {
 }
 
 const TABS = [
-  { name: 'dashboard',     label: 'Accueil', Icon: HomeIcon,    href: '/(collector)/(tabs)/dashboard' },
-  { name: 'savings',       label: 'Comptes', Icon: SavingsIcon, href: '/(collector)/(tabs)/savings' },
-  { name: 'loans',         label: 'Prêts',   Icon: LoanIcon,    href: '/(collector)/(tabs)/loans' },
-  { name: 'notifications', label: 'Alertes', Icon: BellIcon,    href: '/(collector)/(tabs)/notifications' },
-  { name: 'profile',       label: 'Plus',    Icon: MoreIcon,    href: '/(collector)/(tabs)/profile' },
+  { name: 'dashboard', label: 'Accueil', Icon: HomeIcon,    href: '/(collector)/(tabs)/dashboard' },
+  { name: 'savings',   label: 'Comptes', Icon: SavingsIcon, href: '/(collector)/(tabs)/savings' },
+  { name: 'loans',     label: 'Prêts',   Icon: LoanIcon,    href: '/(collector)/(tabs)/loans' },
+  { name: 'profile',   label: 'Plus',    Icon: MoreIcon,    href: '/(collector)/(tabs)/profile' },
 ];
 
 function TabBar({ state }: any) {
@@ -99,7 +98,7 @@ export default function CollectorTabsLayout() {
       <Tabs.Screen name="dashboard" />
       <Tabs.Screen name="savings" />
       <Tabs.Screen name="loans" />
-      <Tabs.Screen name="notifications" />
+      <Tabs.Screen name="notifications" options={{ href: null }} />
       <Tabs.Screen name="profile" />
     </Tabs>
   );
