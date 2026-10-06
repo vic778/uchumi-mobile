@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { Bell, ArrowUpFromLine, CreditCard, PiggyBank, Clock } from 'lucide-react-native';
+import { Bell, ArrowUpFromLine, CreditCard, PiggyBank, ClipboardList } from 'lucide-react-native';
 import { TxIcon } from '@/components/ui/tx-icon';
 import { Colors, Fonts, Routes, Spacing } from '@/constants';
 import { getAccount, getTransactions } from '@/services/member/account';
@@ -91,7 +91,7 @@ export default function CollectorDashboard() {
               <QuickAction icon={<ArrowUpFromLine size={22} color={Colors.primary} strokeWidth={1.8} />} label="Retrait"    onPress={() => router.push(Routes.memberWithdrawals as any)} />
               <QuickAction icon={<CreditCard      size={22} color={Colors.primary} strokeWidth={1.8} />} label="Crédit"     onPress={() => router.push(Routes.memberLoans as any)} />
               <QuickAction icon={<PiggyBank       size={22} color={Colors.primary} strokeWidth={1.8} />} label="Dépôt"      onPress={() => router.push('/(collector)/deposits/new' as any)} />
-              <QuickAction icon={<Clock           size={22} color={Colors.primary} strokeWidth={1.8} />} label="Historique" onPress={() => router.push(Routes.memberTransactions as any)} />
+              <QuickAction icon={<ClipboardList   size={22} color={Colors.primary} strokeWidth={1.8} />} label="Caisse"     onPress={() => router.push(Routes.collectorTransactions as any)} />
             </View>
 
             <View style={[styles.sectionHeader, { marginTop: Spacing.two }]}>
