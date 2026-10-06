@@ -102,3 +102,24 @@ export async function repayLoan(ref: string, amount: number): Promise<CollectorL
   const res = await api.post<{ data: CollectorLoan }>(`/collector/loans/${encodeURIComponent(ref)}/repay`, { amount });
   return res.data.data;
 }
+
+export interface CollectorTransactionItem {
+  id: number;
+  reference: string;
+  kind: string;
+  amount: number;
+  status: string;
+  member?: string;
+  member_phone?: string;
+  approved_by?: string;
+  note?: string;
+  created_at: string;
+}
+
+export async function getCollectorTransactions(params?: {
+  kind?: string;
+  period?: string;
+}): Promise<CollectorTransactionItem[]> {
+  const res = await api.get<{ data: CollectorTransactionItem[] }>('/collector/transactions', { params });
+  return res.data.data;
+}
