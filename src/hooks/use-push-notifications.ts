@@ -4,14 +4,15 @@ import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import { api } from '@/services/api';
 
-// expo-notifications remote push was removed from Expo Go in SDK 53.
-// Dynamic import + runtime guard prevents the crash in Expo Go.
-const IS_EXPO_GO = Constants.appOwnership === 'expo';
+// expoGoConfig is set in Expo Go, null in dev builds and standalone.
+// appOwnership was deprecated in SDK 58 and may return null.
+const IS_EXPO_GO = Constants.expoGoConfig !== null;
 
 async function registerAndSaveToken() {
   if (IS_EXPO_GO || !Device.isDevice) return;
 
-  const Notifications = await import('expo-notifications');
+  const Notifications = await import('expo-notifications').catch(() => null);
+  if (!Notifications) return;
 
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
