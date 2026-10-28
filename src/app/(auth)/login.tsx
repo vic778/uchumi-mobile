@@ -20,7 +20,8 @@ export default function LoginScreen() {
       const res = await login(`243${phone.trim()}`, password);
       await saveToken(res.token);
       if (res.role === 'member')         router.replace('/(member)/(tabs)/dashboard');
-      else if (res.role === 'collector') router.replace('/(collector)/dashboard' as any);
+      else if (res.role === 'collector') router.replace('/(collector)/(tabs)/dashboard' as any);
+      else if (res.role === 'admin')     router.replace('/(admin)/(tabs)/dashboard' as any);
       else Alert.alert('Accès refusé', 'Ce compte ne peut pas se connecter via l\'application mobile.');
     } catch (e: any) {
       Alert.alert('Connexion échouée', e.message);

@@ -15,11 +15,12 @@ export const Routes = {
   memberProfile:       '/(member)/(tabs)/profile',
 
   // collector
-  collectorDashboard: '/(collector)/dashboard',
-  collectorMembers:   '/(collector)/members',
-  collectorDeposit:   '/(collector)/deposits/new',
-  collectorWithdrawals: '/(collector)/withdrawals',
-  collectorLoans:     '/(collector)/loans',
-  collectorKyc:       '/(collector)/kyc/new',
-  collectorProfile:   '/(collector)/profile',
+  collectorDashboard:    '/(collector)/dashboard',
+  collectorMembers:      '/(collector)/members',
+  collectorDeposit:      '/(collector)/deposits/new',
+  collectorWithdrawals:  '/(collector)/withdrawals',
+  collectorTransactions: '/(collector)/transactions',
+  collectorLoans:        '/(collector)/loans',
+  collectorKyc:          '/(collector)/kyc/new',
+  collectorProfile:      '/(collector)/profile',
 } as const;

@@ -24,10 +24,14 @@ export type BlockedAccountTransaction = {
 
 export type Transaction = {
   id: number;
+  reference?: string;
   kind: 'deposit' | 'withdrawal' | 'loan_credit' | 'transfer_to_blocked' | 'transfer_from_blocked';
   amount: number;
-  created_at: string;
+  status?: string;
+  collector?: string;
+  approved_by?: string;
   note?: string;
+  created_at: string;
 };
 
 export type Loan = {

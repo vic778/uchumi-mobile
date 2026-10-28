@@ -1,0 +1,66 @@
+import { Tabs, router } from 'expo-router';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Home, Wallet, CreditCard, Ellipsis } from 'lucide-react-native';
+import { Colors, Fonts } from '@/constants';
+import { usePushNotifications } from '@/hooks/use-push-notifications';
+
+const TABS = [
+  { name: 'dashboard', label: 'Accueil', Icon: Home,       href: '/(collector)/(tabs)/dashboard' },
+  { name: 'savings',   label: 'Comptes', Icon: Wallet,     href: '/(collector)/(tabs)/savings' },
+  { name: 'loans',     label: 'Prêts',   Icon: CreditCard, href: '/(collector)/(tabs)/loans' },
+  { name: 'profile',   label: 'Plus',    Icon: Ellipsis,   href: '/(collector)/(tabs)/profile' },
+];
+
+function TabBar({ state }: any) {
+  const insets = useSafeAreaInsets();
+  const currentRoute = state.routes[state.index]?.name ?? '';
+
+  return (
+    <View>
+      <View style={styles.bar}>
+        {TABS.map((tab) => {
+          const isActive = currentRoute === tab.name || currentRoute.startsWith(tab.name + '/');
+          const color = isActive ? Colors.primary : Colors.steelGray;
+          return (
+            <Pressable
+              key={tab.name}
+              accessibilityRole="button"
+              accessibilityLabel={tab.label}
+              accessibilityState={{ selected: isActive }}
+              onPress={() => { if (!isActive) router.navigate(tab.href as any); }}
+              style={({ pressed }) => [styles.tab, pressed && styles.pressed]}>
+              <tab.Icon size={22} color={color} strokeWidth={1.8} />
+              <Text style={[styles.label, { color }]}>{tab.label}</Text>
+            </Pressable>
+          );
+        })}
+      </View>
+      {insets.bottom > 0 && (
+        <View style={{ height: insets.bottom, backgroundColor: '#000' }} />
+      )}
+    </View>
+  );
+}
+
+export default function CollectorTabsLayout() {
+  usePushNotifications();
+  return (
+    <Tabs
+      screenOptions={{ headerShown: false }}
+      tabBar={(props) => <TabBar {...props} />}>
+      <Tabs.Screen name="dashboard" />
+      <Tabs.Screen name="savings" />
+      <Tabs.Screen name="loans" />
+      <Tabs.Screen name="notifications" options={{ href: null }} />
+      <Tabs.Screen name="profile" />
+    </Tabs>
+  );
+}
+
+const styles = StyleSheet.create({
+  bar:     { backgroundColor: Colors.white, borderTopWidth: 1, borderTopColor: '#e5e7eb', flexDirection: 'row', paddingTop: 8, paddingBottom: 6 },
+  tab:     { flex: 1, alignItems: 'center', gap: 3, paddingVertical: 4 },
+  label:   { fontFamily: Fonts.medium, fontSize: 12, lineHeight: 13 },
+  pressed: { opacity: 0.6 },
+});

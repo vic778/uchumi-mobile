@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
+import { Plus, ArrowUpFromLine } from 'lucide-react-native';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getWithdrawals } from '@/services/member/withdrawals';
@@ -25,9 +25,7 @@ export default function WithdrawalsScreen() {
       <View style={[styles.header, { paddingTop: insets.top + 14 }]}>
         <Text style={styles.headerTitle}>Retraits</Text>
         <TouchableOpacity style={styles.newBtn} onPress={() => router.push('/(member)/withdrawals/new' as any)}>
-          <Svg width={16} height={16} viewBox="0 0 24 24" fill="none" style={{ marginRight: 4 }}>
-            <Path d="M12 5V19M5 12H19" stroke="#fff" strokeWidth={2.2} strokeLinecap="round" />
-          </Svg>
+          <Plus size={16} color="#fff" strokeWidth={2.2} style={{ marginRight: 4 }} />
           <Text style={styles.newLabel}>Nouveau</Text>
         </TouchableOpacity>
       </View>
@@ -44,10 +42,7 @@ export default function WithdrawalsScreen() {
           ListEmptyComponent={
             <View style={styles.emptyWrap}>
               <View style={styles.emptyIcon}>
-                <Svg width={32} height={32} viewBox="0 0 24 24" fill="none">
-                  <Path d="M12 21V9M12 9L7 14M12 9L17 14" stroke={Colors.iconMuted} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
-                  <Path d="M3 3H21" stroke={Colors.iconMuted} strokeWidth={1.8} strokeLinecap="round" />
-                </Svg>
+                <ArrowUpFromLine size={32} color={Colors.iconMuted} strokeWidth={1.8} />
               </View>
               <Text style={styles.emptyTitle}>Aucun retrait</Text>
               <Text style={styles.emptyText}>Vos demandes de retrait apparaîtront ici</Text>
@@ -56,10 +51,7 @@ export default function WithdrawalsScreen() {
           renderItem={({ item }) => (
             <View style={styles.row}>
               <View style={styles.rowIcon}>
-                <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
-                  <Path d="M12 21V9M12 9L7 14M12 9L17 14" stroke="#f59e0b" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                  <Path d="M3 3H21" stroke="#f59e0b" strokeWidth={2} strokeLinecap="round" />
-                </Svg>
+                <ArrowUpFromLine size={20} color="#f59e0b" strokeWidth={2} />
               </View>
               <View style={styles.rowMid}>
                 <Text style={styles.rowTitle}>Demande de retrait</Text>

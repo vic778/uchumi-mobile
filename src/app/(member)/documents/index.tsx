@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
+import { ClipboardList } from 'lucide-react-native';
 import { BackButton } from '@/components/ui/back-button';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { Colors, Fonts, Spacing } from '@/constants';
@@ -62,10 +62,7 @@ export default function DocumentsScreen() {
           ListEmptyComponent={
             <View style={styles.emptyWrap}>
               <View style={styles.emptyIcon}>
-                <Svg width={32} height={32} viewBox="0 0 24 24" fill="none">
-                  <Path d="M9 5H7C5.9 5 5 5.9 5 7V19C5 20.1 5.9 21 7 21H17C18.1 21 19 20.1 19 19V7C19 5.9 18.1 5 17 5H15M9 5C9 5.55 9.45 6 10 6H14C14.55 6 15 5.55 15 5M9 5C9 4.45 9.45 4 10 4H14C14.55 4 15 4.45 15 5"
-                    stroke={Colors.iconMuted} strokeWidth={1.8} strokeLinecap="round" />
-                </Svg>
+                <ClipboardList size={32} color={Colors.iconMuted} strokeWidth={1.8} />
               </View>
               <Text style={styles.emptyTitle}>Aucun document soumis</Text>
               <Text style={styles.emptyText}>
@@ -81,10 +78,7 @@ export default function DocumentsScreen() {
           renderItem={({ item }) => (
             <View style={styles.row}>
               <View style={styles.rowIcon}>
-                <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
-                  <Path d="M9 5H7C5.9 5 5 5.9 5 7V19C5 20.1 5.9 21 7 21H17C18.1 21 19 20.1 19 19V7C19 5.9 18.1 5 17 5H15M9 5C9 5.55 9.45 6 10 6H14C14.55 6 15 5.55 15 5M9 5C9 4.45 9.45 4 10 4H14C14.55 4 15 4.45 15 5"
-                    stroke={Colors.primary} strokeWidth={1.8} strokeLinecap="round" />
-                </Svg>
+                <ClipboardList size={20} color={Colors.primary} strokeWidth={1.8} />
               </View>
               <View style={styles.rowMid}>
                 <Text style={styles.rowTitle}>{TYPE_LABELS[item.document_type] ?? item.document_type}</Text>

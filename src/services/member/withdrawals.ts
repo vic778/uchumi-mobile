@@ -6,7 +6,7 @@ export async function getWithdrawals(): Promise<Withdrawal[]> {
   return res.data.data;
 }
 
-export async function requestWithdrawal(amount: number): Promise<Withdrawal> {
-  const res = await api.post<{ data: Withdrawal }>('/member/withdrawals', { amount });
+export async function requestWithdrawal(params: { amount: number; collector_phone: string }): Promise<Withdrawal> {
+  const res = await api.post<{ data: Withdrawal }>('/member/withdrawals', params);
   return res.data.data;
 }

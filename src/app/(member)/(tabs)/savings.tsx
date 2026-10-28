@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Dimensions, FlatList, ScrollView, StyleSheet, Text, View, ViewToken } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
+import { ClipboardList, ArrowUp, ArrowDown } from 'lucide-react-native';
 import { Colors, Fonts, Spacing } from '@/constants';
 import { getAccounts, getBlockedAccountTransactions } from '@/services/member/account';
 import type { Account, BlockedAccountTransaction } from '@/types';
@@ -131,10 +131,7 @@ function BlockedHistory({ txs, loading }: { txs: BlockedAccountTransaction[]; lo
       </Text>
       {txs.length === 0 ? (
         <View style={styles.emptyHistoryWrap}>
-          <Svg width={32} height={32} viewBox="0 0 24 24" fill="none">
-            <Path d="M9 5H7C5.9 5 5 5.9 5 7V19C5 20.1 5.9 21 7 21H17C18.1 21 19 20.1 19 19V7C19 5.9 18.1 5 17 5H15M9 5C9 5.55 9.45 6 10 6H14C14.55 6 15 5.55 15 5M9 5C9 4.45 9.45 4 10 4H14C14.55 4 15 4.45 15 5"
-              stroke={Colors.iconMuted} strokeWidth={1.8} strokeLinecap="round" />
-          </Svg>
+          <ClipboardList size={32} color={Colors.iconMuted} strokeWidth={1.8} />
           <Text style={styles.emptyHistoryText}>Aucune transaction sur ce compte</Text>
         </View>
       ) : (
@@ -152,12 +149,9 @@ function BlockedHistory({ txs, loading }: { txs: BlockedAccountTransaction[]; lo
             return (
               <View style={styles.txRow}>
                 <View style={[styles.txIcon, { backgroundColor: isCredit ? '#e8f8e8' : '#fce8e8' }]}>
-                  <Svg width={18} height={18} viewBox="0 0 24 24" fill="none">
-                    {isCredit
-                      ? <Path d="M12 19V5M5 12L12 5L19 12" stroke="#22c55e" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                      : <Path d="M12 5V19M5 12L12 19L19 12" stroke="#ef4444" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                    }
-                  </Svg>
+                  {isCredit
+                    ? <ArrowDown size={18} color="#22c55e" strokeWidth={2} />
+                    : <ArrowUp   size={18} color="#ef4444" strokeWidth={2} />}
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.txTitle}>{isCredit ? 'Virement entrant' : 'Virement sortant'}</Text>

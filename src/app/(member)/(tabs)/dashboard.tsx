@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import Svg, { Path } from 'react-native-svg';
+import { Bell, ArrowUpFromLine, CreditCard, PiggyBank, Clock } from 'lucide-react-native';
 import { TxIcon } from '@/components/ui/tx-icon';
 import { Colors, Fonts, Routes, Spacing } from '@/constants';
 import { getAccount, getTransactions } from '@/services/member/account';
@@ -47,12 +47,7 @@ export default function MemberDashboard() {
             <Text style={styles.headerName} numberOfLines={1}>{userName || 'Membre'}</Text>
           </View>
           <TouchableOpacity onPress={() => router.push(Routes.memberNotifications as any)} style={styles.bellBtn}>
-            <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-              <Path d="M18 8A6 6 0 0 0 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z"
-                stroke="#fff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
-              <Path d="M13.73 21C13.55 21.3 13.28 21.55 12.96 21.72C12.65 21.89 12.33 21.97 12 21.97C11.67 21.97 11.35 21.89 11.04 21.72C10.72 21.55 10.45 21.3 10.27 21"
-                stroke="#fff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
-            </Svg>
+            <Bell size={22} color="#fff" strokeWidth={1.8} />
           </TouchableOpacity>
         </View>
       </View>
@@ -96,10 +91,10 @@ export default function MemberDashboard() {
               <Text style={styles.sectionLabel}>OPÉRATIONS RAPIDES</Text>
             </View>
             <View style={styles.actionsGrid}>
-              <QuickAction icon="💸" label="Retrait" onPress={() => router.push(Routes.memberWithdrawals as any)} />
-              <QuickAction icon="💳" label="Crédit" onPress={() => router.push(Routes.memberLoans as any)} />
-              <QuickAction icon="💰" label="Dépôt" onPress={() => {}} disabled />
-              <QuickAction icon="📊" label="Historique" onPress={() => router.push(Routes.memberTransactions as any)} />
+              <QuickAction icon={<ArrowUpFromLine size={22} color={Colors.primary} strokeWidth={1.8} />} label="Retrait"    onPress={() => router.push(Routes.memberWithdrawals as any)} />
+              <QuickAction icon={<CreditCard      size={22} color={Colors.primary} strokeWidth={1.8} />} label="Crédit"     onPress={() => router.push(Routes.memberLoans as any)} />
+              <QuickAction icon={<PiggyBank       size={22} color={Colors.primary} strokeWidth={1.8} />} label="Dépôt"      onPress={() => {}} disabled />
+              <QuickAction icon={<Clock           size={22} color={Colors.primary} strokeWidth={1.8} />} label="Historique" onPress={() => router.push(Routes.memberTransactions as any)} />
             </View>
 
             {/* Recent activity */}
@@ -126,11 +121,11 @@ export default function MemberDashboard() {
   );
 }
 
-function QuickAction({ icon, label, onPress, disabled }: { icon: string; label: string; onPress: () => void; disabled?: boolean }) {
+function QuickAction({ icon, label, onPress, disabled }: { icon: React.ReactNode; label: string; onPress: () => void; disabled?: boolean }) {
   return (
     <TouchableOpacity style={[styles.actionItem, disabled && styles.actionItemDisabled]} onPress={onPress} activeOpacity={disabled ? 1 : 0.75} disabled={disabled}>
       <View style={[styles.actionIconWrap, disabled && styles.actionIconWrapDisabled]}>
-        <Text style={styles.actionEmoji}>{icon}</Text>
+        {icon}
       </View>
       <View style={{ flex: 1 }}>
         <Text style={[styles.actionLabel, disabled && styles.actionLabelDisabled]}>{label}</Text>
@@ -205,7 +200,6 @@ const styles = StyleSheet.create({
   actionsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.three, marginBottom: Spacing.three },
   actionItem: { width: '47%', backgroundColor: Colors.white, borderWidth: 1, borderColor: Colors.coolGray, borderRadius: 14, padding: Spacing.three, flexDirection: 'row', alignItems: 'center', gap: Spacing.three, elevation: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 3 },
   actionIconWrap: { width: 38, height: 38, borderRadius: 10, backgroundColor: '#e8f4f8', alignItems: 'center', justifyContent: 'center' },
-  actionEmoji: { fontSize: 18 },
   actionLabel: { fontFamily: Fonts.bold, fontSize: 15, color: Colors.charcoal, flexShrink: 1 },
   actionItemDisabled: { opacity: 0.55, borderStyle: 'dashed' },
   actionIconWrapDisabled: { backgroundColor: Colors.coolGray },
